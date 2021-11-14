@@ -1,12 +1,12 @@
 {
-  "main.css": "/acquaintance/static/css/main.e96de2d4.chunk.css",
-  "main.js": "/acquaintance/static/js/main.2f8ea755.chunk.js",
-  "runtime~main.js": "/acquaintance/static/js/runtime~main.b9d28e2a.js",
+  "main.css": "/acquaintance/static/css/main.4e41adcd.chunk.css",
+  "main.js": "/acquaintance/static/js/main.d16dd375.chunk.js",
+  "runtime~main.js": "/acquaintance/static/js/runtime~main.2b92c962.js",
   "static/css/2.e0c11635.chunk.css": "/acquaintance/static/css/2.e0c11635.chunk.css",
-  "static/js/2.3c6546d9.chunk.js": "/acquaintance/static/js/2.3c6546d9.chunk.js",
-  "static/js/3.25605062.chunk.js": "/acquaintance/static/js/3.25605062.chunk.js",
-  "static/js/4.a740636c.chunk.js": "/acquaintance/static/js/4.a740636c.chunk.js",
+  "static/js/2.a8298d77.chunk.js": "/acquaintance/static/js/2.a8298d77.chunk.js",
+  "static/js/3.960a95dd.chunk.js": "/acquaintance/static/js/3.960a95dd.chunk.js",
+  "static/js/4.ff0019bc.chunk.js": "/acquaintance/static/js/4.ff0019bc.chunk.js",
   "index.html": "/acquaintance/index.html",
-  "precache-manifest.a67c7ee7e2b9bdbd14ce0a65eb361ee2.js": "/acquaintance/precache-manifest.a67c7ee7e2b9bdbd14ce0a65eb361ee2.js",
+  "precache-manifest.86adc11946afef2203f7e2018d738eda.js": "/acquaintance/precache-manifest.86adc11946afef2203f7e2018d738eda.js",
   "service-worker.js": "/acquaintance/service-worker.js"
 }
