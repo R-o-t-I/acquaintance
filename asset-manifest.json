@@ -1,5 +1,5 @@
 {
-  "main.css": "/acquaintance/static/css/main.d7f0aa50.chunk.css",
+  "main.css": "/acquaintance/static/css/main.40906d4f.chunk.css",
   "main.js": "/acquaintance/static/js/main.78c00a1e.chunk.js",
   "runtime~main.js": "/acquaintance/static/js/runtime~main.8b74df6a.js",
   "static/css/2.1a271433.chunk.css": "/acquaintance/static/css/2.1a271433.chunk.css",
@@ -7,6 +7,6 @@
   "static/js/3.c95c93a5.chunk.js": "/acquaintance/static/js/3.c95c93a5.chunk.js",
   "static/js/4.12dc7b14.chunk.js": "/acquaintance/static/js/4.12dc7b14.chunk.js",
   "index.html": "/acquaintance/index.html",
-  "precache-manifest.9773211114d5f8442d7fde65c2e0a84d.js": "/acquaintance/precache-manifest.9773211114d5f8442d7fde65c2e0a84d.js",
+  "precache-manifest.76bfcc4e917e437b0f6ca2ba090becc9.js": "/acquaintance/precache-manifest.76bfcc4e917e437b0f6ca2ba090becc9.js",
   "service-worker.js": "/acquaintance/service-worker.js"
 }
