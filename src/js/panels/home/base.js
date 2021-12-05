@@ -19,10 +19,18 @@ import {
     Link,
     Counter,
     ActionSheet,
-    ActionSheetItem
+    ActionSheetItem,
+    CellButton,
+    VKCOM,
+    IOS
 } from '@vkontakte/vkui'
 
+import { Dropdown } from '@vkontakte/vkui/dist/unstable';
+import '@vkontakte/vkui/dist/unstable.css' // CSS достаточно подключить один раз 
+
 import bridge from '@vkontakte/vk-bridge';
+
+import queryGet from '../../../functions/query_get.jsx';
 
 import {
   Icon12Verified,
@@ -48,7 +56,7 @@ class HomePanel extends React.Component {
       };
       this.openInteractionAcquaintance = this.openInteractionAcquaintance.bind(this);
       this.openInteractionAcquaintance2 = this.openInteractionAcquaintance2.bind(this);
-      this.targetRef = React.createRef();
+      //this.targetRef = React.createRef();
     }
 
     openInteractionAcquaintance() {
@@ -56,7 +64,7 @@ class HomePanel extends React.Component {
         <ActionSheet
           onClose={() => this.props.closePopout()}
           iosCloseItem={<ActionSheetItem autoclose mode="cancel">Отменить</ActionSheetItem>}
-          toggleRef={this.targetRef.current}
+          //toggleRef={this.targetRef.current}
         >
           <ActionSheetItem autoclose before={<Icon28EditOutline/>}>
             Редактировать запись
@@ -77,7 +85,7 @@ class HomePanel extends React.Component {
       <ActionSheet
         onClose={() => this.props.closePopout()}
         iosCloseItem={<ActionSheetItem autoclose mode="cancel">Отменить</ActionSheetItem>}
-        toggleRef={this.targetRef.current}
+        //toggleRef={this.targetRef.current}
       >
         <ActionSheetItem autoclose before={<Icon28HideOutline />}>
           Скрыть записи автора
@@ -93,11 +101,22 @@ class HomePanel extends React.Component {
     );
 }
 
+openImg() {
+  bridge.send("VKWebAppShowImages", {
+    images: [
+      "https://img2.akspic.ru/originals/1/7/1/5/6/165171-zemlya-oblako-atmosfera-poslesvechenie-zakat-1080x1920.jpg"
+    ]
+  });
+}
+
   render() {
-    const {id, setPage, withoutEpic} = this.props;
+    const {id, setPage, withoutEpic, platform} = this.props;
 
     return (
         <Panel id={id}>
+        {/*Для ПК */}
+				{
+					(queryGet('vk_platform') === 'desktop_web') && (
             <PanelHeader
               right={
                 <PanelHeaderButton
@@ -112,6 +131,31 @@ class HomePanel extends React.Component {
             >
               Лента
             </PanelHeader>
+          )
+        }
+        {/*Для всех остальных устройств */}
+				{
+					(queryGet('vk_platform') === 'mobile_android'
+					|| queryGet('vk_platform') === 'mobile_iphone'
+					|| queryGet('vk_platform') === 'mobile_android_messenger'
+					|| queryGet('vk_platform') === 'mobile_iphone_messenger'
+					|| queryGet('vk_platform') === 'mobile_web') && (
+            <PanelHeader
+              left={
+                <PanelHeaderButton
+                  aria-label="Уведомления. У вас N уведомлений"
+                  label={<Counter size="s" mode="prominent">21</Counter>}
+                  onClick={() => setPage('home', 'notifications')}
+                >
+                  <Icon28Notifications />
+                </PanelHeaderButton>
+              }
+              aria-label="Лента"
+            >
+              Лента
+            </PanelHeader>
+          )
+        }
             <Group>
               <HorizontalScroll showArrows getScrollToLeft={i => i - 120} getScrollToRight={i => i + 120}>
                 <div style={{ display: 'flex' }}>
@@ -122,8 +166,8 @@ class HomePanel extends React.Component {
                   <HorizontalCell header={<div className="nameNewsStory">Новости</div>}>
                     <Avatar className="newsStory" size={56} src="" />
                   </HorizontalCell>
-                  <HorizontalCell header={<div className="nameStory">Артём</div>}>
-                    <Avatar className="noNewStory" size={56} src="" />
+                  <HorizontalCell onClick={() => setPage('home', 'storyUsers')} header={<div className="nameStory">Артём</div>}>
+                    <Avatar className="noNewStory" size={56} src="https://sun9-18.userapi.com/impg/iCu0lPqTMBqw1c2aV9Ra5OiYd9Ki3yamQVkTfw/5Mw6yCkWOnU.jpg?size=1201x1600&quality=96&sign=7dfe1cea7dfe8b88f5a617790320848c&type=album" />
                   </HorizontalCell>
                   <HorizontalCell header={<div className="nameNewStory">Ndfdgdgdfhfhdfgdfsdfame</div>}>
                     <Avatar className="newStory" size={56} src="" />
@@ -163,19 +207,51 @@ class HomePanel extends React.Component {
                 <SimpleCell 
                   before={<Avatar size={48} src="" />}
                   badge={<Icon12Verified />}
-                  after={<IconButton getRootRef={this.targetRef.current} onClick={() => this.openInteractionAcquaintance()}><Icon28MoreVertical /></IconButton>}
-                  description="вчера в 15:12"
+                  after={
+                    <Dropdown
+                      action="hover"
+                      placement="bottom"
+                      content={
+                        <div>
+                          <CellButton before={<Icon28HideOutline />}>Скрыть записи автора</CellButton>
+                          <CellButton before={<Icon28ReportOutline />} mode="danger">Пожаловаться</CellButton>
+                        </div>
+                      }
+                    >
+                      <IconButton onClick={platform != VKCOM ? () => this.openInteractionAcquaintance2() : undefined}><Icon28MoreVertical /></IconButton>
+                    </Dropdown>
+                  }
+                  description="вчера в 19:35"
                 >
-                  Александр Тихонович
+                  Артём Петрунин
                 </SimpleCell>
-                <Div>Всем привет! Мой первый пост. Как вам этот закат? Пишите комментарии, ставьте лайки. <Link>#Закат</Link> <Link>@VK</Link></Div>
-                <Div><img className="imgPost" src="https://img2.akspic.ru/originals/1/7/1/5/6/165171-zemlya-oblako-atmosfera-poslesvechenie-zakat-1080x1920.jpg" /></Div>
+                <Div>Всем привет!</Div>
                 <div className="allBlockIconPost">
                   <div style={{display: "flex"}}>
-                    <Tappable className="blockIconPost">
-                      <Icon28LikeOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
-                      <div className="indicatorblockIconPost">11</div>
-                    </Tappable>
+                    <Dropdown
+                      action="hover"
+                      placement="top"
+                      style={{margin: "0px 10px"}}
+                      content={
+                        <div style={{display: "flex"}}>
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/sad.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/think.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/stareyes.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fearful.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/poop.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/blush.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/cool.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/like.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fire.gif" className="emojiPost" />
+                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/heart.gif" className="emojiPost" />
+                        </div>
+                      }
+                    >
+                      <Tappable className="blockIconPost">
+                        <Icon28LikeOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
+                        <div className="indicatorblockIconPost">11</div>
+                      </Tappable>
+                    </Dropdown>
                     <Tappable style={{marginLeft: "10px"}} className="blockIconPost">
                       <Icon28CommentOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
                       <div className="indicatorblockIconPost">11</div>
@@ -183,7 +259,7 @@ class HomePanel extends React.Component {
                   </div>
                   <Tappable className="blockIconPost" style={{marginLeft: 10}}>
                     <Icon28GiftOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
-                    <div className="indicatorblockIconPost">Подарок</div>
+                    <div onClick={() => setPage('home', 'gifts')} className="indicatorblockIconPost">Подарок</div>
                   </Tappable>
                 </div>
               </div>
@@ -193,18 +269,52 @@ class HomePanel extends React.Component {
                 <SimpleCell 
                   before={<Avatar size={48} src="" />}
                   badge={<Icon12Verified />}
-                  after={<IconButton getRootRef={this.targetRef.current} onClick={() => this.openInteractionAcquaintance2()}><Icon28MoreVertical /></IconButton>}
+                  after={
+                    <Dropdown
+                      action="hover"
+                      placement="bottom"
+                      content={
+                        <div>
+                          <CellButton before={<Icon28EditOutline />}>Редактировать запись</CellButton>
+                          <CellButton before={<Icon28DeleteOutline />} mode="danger">Удалить запись</CellButton>
+                        </div>
+                      }
+                    >
+                      <IconButton onClick={platform != VKCOM ? () => this.openInteractionAcquaintance() : undefined}><Icon28MoreVertical /></IconButton>
+                    </Dropdown>
+                  }
                   description="вчера в 15:12"
                 >
-                  Артём Петрунин
+                  Александр Тихонович
                 </SimpleCell>
-                <Div>Всем привет!</Div>
+                <Div>Всем привет! Мой первый пост. Как вам этот закат? Пишите комментарии, ставьте лайки. <Link>#Закат</Link> <Link>@VK</Link></Div>
+                <Div><img onClick={this.openImg} className="imgPost" src="https://img2.akspic.ru/originals/1/7/1/5/6/165171-zemlya-oblako-atmosfera-poslesvechenie-zakat-1080x1920.jpg" /></Div>
                 <div className="allBlockIconPost">
                   <div style={{display: "flex"}}>
+                  <Dropdown
+                    action="hover"
+                    placement="top"
+                    style={{margin: "0px 10px"}}
+                    content={
+                      <div style={{display: "flex"}}>
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/sad.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/think.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/stareyes.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fearful.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/poop.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/blush.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/cool.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/like.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fire.gif" className="emojiPost" />
+                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/heart.gif" className="emojiPost" />
+                      </div>
+                    }
+                  >
                     <Tappable className="blockIconPost">
                       <Icon28LikeOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
                       <div className="indicatorblockIconPost">11</div>
                     </Tappable>
+                  </Dropdown>
                     <Tappable style={{marginLeft: "10px"}} className="blockIconPost">
                       <Icon28CommentOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
                       <div className="indicatorblockIconPost">11</div>
@@ -212,7 +322,7 @@ class HomePanel extends React.Component {
                   </div>
                   <Tappable className="blockIconPost" style={{marginLeft: 10}}>
                     <Icon28GiftOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
-                    <div className="indicatorblockIconPost">Подарок</div>
+                    <div onClick={() => setPage('home', 'gifts')} className="indicatorblockIconPost">Подарок</div>
                   </Tappable>
                 </div>
               </div>

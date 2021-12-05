@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {setPage, openPopout, closePopout} from "../../store/router/actions";
+import {setPage, openPopout, closePopout, goBack} from "../../store/router/actions";
 
 import {
     Panel,
@@ -31,7 +31,8 @@ import {
 		Spacing,
 		VKCOM,
 		platform,
-		Snackbar
+		Snackbar,
+		PanelHeaderBack
 } from "@vkontakte/vkui";
 import {
     Icon28SchoolOutline,
@@ -71,21 +72,11 @@ import bridge from '@vkontakte/vk-bridge';
 
 import queryGet from '../../../functions/query_get.jsx';
 
-var infouser = 0
-var first_name = 'Загрузка...'
-var last_name
-var user_id
-var photo
-
-class ProfilePanel extends React.Component {
+class UserProfilePanel extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-				first_name: first_name,
-				last_name: last_name,
-				user_id: user_id,
-				photo: photo,
 				mode: 'all',
 				activeTab: 'allPost'
 		};
@@ -94,32 +85,6 @@ class ProfilePanel extends React.Component {
 	
 	toggleContext () {
 		this.setState({ contextOpened: !this.state.contextOpened });
-	}
-
-	componentDidMount() {
-		if (infouser === 0) {
-			this.getInfoUser();
-		}
-	}
-
-	async getInfoUser() {
-		//this.props.openPopout(<ScreenSpinner/>)
-
-		let user_info = await bridge.send('VKWebAppGetUserInfo');
-		first_name = user_info.first_name
-		last_name = user_info.last_name
-		photo = user_info.photo_200
-		user_id = user_info.id
-		this.setState({ 
-			first_name: first_name,
-			last_name: last_name,
-			user_id: user_id,
-			photo: photo,
-		});
-		infouser = 1
-
-		this.props.closePopout()
-
 	}
 
 	openSnackbar () {
@@ -135,69 +100,27 @@ class ProfilePanel extends React.Component {
 	}
 
 	render() {
-		const {id, platform, setPage} = this.props;
-		const {photo, first_name, last_name, user_id} = this.state;
+		const {id, platform, setPage, goBack} = this.props;
 
 		return (
 			<Panel id={id}>
-				{/*Для ПК */}
-				{
-					(queryGet('vk_platform') === 'desktop_web') && (
-					<PanelHeader
-						right={
-							<PanelHeaderButton
-								aria-label="Настройки"
-								onClick={() => setPage('profile', 'settings')}
-							>
-								<Icon28SettingsOutline />
-							</PanelHeaderButton>
-						}
-						separator={false}
-						aria-label="Профиль пользователя @Alexander"
+				<PanelHeader
+					left={<PanelHeaderBack onClick={() => goBack()} label={platform === VKCOM ? 'Назад' : undefined} />}
+					separator={false}
+					aria-label="Профиль пользователя @skgopnik"
+				>
+					<PanelHeaderContent
+						aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
+						onClick={this.toggleContext}
 					>
-						<PanelHeaderContent
-							aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
-							onClick={this.toggleContext}
-						>
-							@Alexander
-						</PanelHeaderContent>
-					</PanelHeader>
-					)
-				}
-				{/*Для всех остальных устройств */}
-				{
-					(queryGet('vk_platform') === 'mobile_android'
-					|| queryGet('vk_platform') === 'mobile_iphone'
-					|| queryGet('vk_platform') === 'mobile_android_messenger'
-					|| queryGet('vk_platform') === 'mobile_iphone_messenger'
-					|| queryGet('vk_platform') === 'mobile_web') && (
-						<PanelHeader
-							left={
-								<PanelHeaderButton
-									aria-label="Настройки"
-									onClick={() => setPage('profile', 'settings')}
-								>
-									<Icon28SettingsOutline />
-								</PanelHeaderButton>
-							}
-							separator={false}
-							aria-label="Профиль пользователя @Alexander"
-						>
-							<PanelHeaderContent
-								aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
-								onClick={this.toggleContext}
-							>
-								@Alexander
-							</PanelHeaderContent>
-						</PanelHeader>
-					)
-				}
+						@skgopnik
+					</PanelHeaderContent>
+				</PanelHeader>
 				<PanelHeaderContext opened={this.state.contextOpened} onClose={this.toggleContext}>
 					<List>
 						<CellButton 
 							before={<Icon28LogoVk />}
 							multiline
-							href={`https://vk.com/id${user_id}`} 
 							target='_blank' 
 						>
 							Перейти в профиль VK
@@ -214,7 +137,7 @@ class ProfilePanel extends React.Component {
 						>
 							Поделиться профилем
 						</CellButton >
-						{/*<CellButton 
+						<CellButton 
 							before={<Icon28BlockOutline />}
 							multiline
 							mode="danger"
@@ -227,7 +150,7 @@ class ProfilePanel extends React.Component {
 							mode="danger"
 						>
 							Пожаловаться
-						</CellButton >*/}
+						</CellButton >
 					</List>
 				</PanelHeaderContext>
 				{/*Для ПК */}
@@ -241,36 +164,22 @@ class ProfilePanel extends React.Component {
 									bullets="light"
 									showArrows
 								>
-									<img src={photo} />
-									<div style={{ backgroundColor: 'var(--button_commerce_background)' }} />
-									<div style={{ backgroundColor: 'var(--accent)' }} />
-									{/*У другого профиля*/}
-									{/*<Placeholder
+									<img style={{objectFit: "cover"}} src="https://sun9-61.userapi.com/impg/Uh2AlA6e_cswtjmOO_IVHJ0LhL3WxDUPPGjx1A/57_rE5bJkjA.jpg?size=453x604&quality=95&sign=6fd12c61ac91d70aaeea13faee160da5&type=album" />
+									<img style={{objectFit: "cover"}} src="https://sun9-3.userapi.com/impg/sijemgHQpkinmNnxcUlKttjtXx5rr3hKSU60cA/pbz3hky7RlM.jpg?size=811x1080&quality=95&sign=9b142c4007a3200619ab1b09bacf4f08&type=album" />
+									<img style={{objectFit: "cover"}} src="https://sun9-80.userapi.com/impg/iCu0lPqTMBqw1c2aV9Ra5OiYd9Ki3yamQVkTfw/5Mw6yCkWOnU.jpg?size=811x1080&quality=96&sign=5d331e3f20502fcc4afa1b967d953635&type=album" />
+									<Placeholder
 										icon={<Icon56LockOutline />}
 										header="Фото скрыто"
 										action={<Button onClick={() => this.openSnackbar()} size="m">Запросить доступ</Button>}
 									>
-										Запрсите у @Alexander доступ к фото, чтобы посмотреть его
-									</Placeholder>*/}
+										Запрсите у @skgopnik доступ к фото, чтобы посмотреть его
+									</Placeholder>
 								</Gallery>
 								<div style={{textAlign: "center", marginTop: 10}}>
-									<Title level="2" weight="bold">{first_name} {last_name}</Title>
+									<Title level="2" weight="bold">Артём Петрунин</Title>
 									<Text style={{color: "var(--text_secondary)"}}>80 м · 22 года</Text>
 								</div>
-								{/*У своего профиля*/}
 								<div style={{display: "flex"}}>
-									<Button
-										stretched size="l"
-										style={{marginTop: 10}}
-										before={<Icon28EditOutline width={24} height={24} />}
-										mode="outline"
-										onClick={() => setPage('profile', 'editProfile')}
-									>
-										Редактировать информацию
-									</Button>
-								</div>
-								{/*У другого профиля*/}
-								{/*<div style={{display: "flex"}}>
 									<Button
 										stretched size="l"
 										style={{marginTop: 10}}
@@ -290,7 +199,7 @@ class ProfilePanel extends React.Component {
 										style={{marginTop: 10}}
 										before={<Icon24GiftOutline />}
 									/>
-								</div>*/}
+								</div>
 								<div style={{display: "flex", justifyContent: "space-around", marginTop: 10}}>
 									<Tappable style={{textAlign: "center", width: "calc(100%/3)", padding: 10}}>
 										<div style={{fontWeight: "500"}}>7502</div>
@@ -315,7 +224,7 @@ class ProfilePanel extends React.Component {
 										textLevel="primary"
 										style={{marginLeft: "-15px", marginRight: "-15px"}}
 									>
-										ВКонтакте начинался как сайт для выпускников вузов, а сейчас это огромная экосистема с безграничными возможностями и миллионами пользователей.
+										ВКонтакте начинался как сайт.
 									</MiniInfoCell>
 									<MiniInfoCell
 										before={<Icon20Search />}
@@ -331,7 +240,7 @@ class ProfilePanel extends React.Component {
 										textLevel="primary"
 										style={{marginLeft: "-15px", marginRight: "-15px"}}
 									>
-										Минск
+										Москва
 									</MiniInfoCell>
 									<MiniInfoCell
 										before={<Icon20UserOutline />}
@@ -339,7 +248,7 @@ class ProfilePanel extends React.Component {
 										textLevel="primary"
 										style={{marginLeft: "-15px", marginRight: "-15px"}}
 									>
-										Белый · 175см · 55 кг
+										Белый · 185см · 63 кг
 									</MiniInfoCell>
 									<MiniInfoCell
 										before={<Icon20LikeOutline />}
@@ -347,15 +256,7 @@ class ProfilePanel extends React.Component {
 										textLevel="primary"
 										style={{marginLeft: "-15px", marginRight: "-15px"}}
 									>
-										В отношениях
-									</MiniInfoCell>
-									<MiniInfoCell
-										before={<Icon20VirusOutline />}
-										textWrap="short"
-										textLevel="primary"
-										style={{marginLeft: "-15px", marginRight: "-15px"}}
-									>
-										Отрицательный · 30 октября 2021г.
+										В активном поиске
 									</MiniInfoCell>
 									<MiniInfoCell
 										before={<Icon20UsersOutline />}
@@ -363,7 +264,7 @@ class ProfilePanel extends React.Component {
 										textLevel="primary"
 										style={{marginLeft: "-15px", marginRight: "-15px"}}
 									>
-										Гей · Уни
+										Натурал
 									</MiniInfoCell>
 									<MiniInfoCell
 										before={<Icon28HashtagOutline width={20} height={20} />}
@@ -371,7 +272,7 @@ class ProfilePanel extends React.Component {
 										textLevel="primary"
 										style={{marginLeft: "-15px", marginRight: "-15px"}}
 									>
-										#Kiss #fetish #dogplay #gaymer
+										#Kiss
 									</MiniInfoCell>
 									<Header style={{margin: "-10px -15px"}} aside={<Link>Показать все <Icon12ChevronOutline /></Link>}><Title label="3" weight="bold">Скрытые фото</Title></Header>
 									<div style={{display: "flex", justifyContent: "space-around"}}>
@@ -400,45 +301,29 @@ class ProfilePanel extends React.Component {
 									bullets="light"
 									showArrows
 								>
-									<img className="img-gallery-profile" onClick={this.img} style={{ objectFit: "cover" }} src="https://sun9-38.userapi.com/impf/c854224/v854224036/a1aef/klD5bu0WkuU.jpg?size=2560x1440&quality=96&sign=dfd0778c6f06f69789b43bb41d57af2d&type=album" />
-									<img onClick={this.img} style={{ objectFit: "cover" }} src="https://sun9-38.userapi.com/impf/c854224/v854224036/a1aef/klD5bu0WkuU.jpg?size=2560x1440&quality=96&sign=dfd0778c6f06f69789b43bb41d57af2d&type=album" />
-									<img onClick={this.img} style={{ objectFit: "cover" }} src="https://sun9-38.userapi.com/impf/c854224/v854224036/a1aef/klD5bu0WkuU.jpg?size=2560x1440&quality=96&sign=dfd0778c6f06f69789b43bb41d57af2d&type=album" />
-									{/*У другого профиля*/}
-									{/*<Placeholder
+									<img style={{objectFit: "cover"}} src="https://sun9-61.userapi.com/impg/Uh2AlA6e_cswtjmOO_IVHJ0LhL3WxDUPPGjx1A/57_rE5bJkjA.jpg?size=453x604&quality=95&sign=6fd12c61ac91d70aaeea13faee160da5&type=album" />
+									<img style={{objectFit: "cover"}} src="https://sun9-3.userapi.com/impg/sijemgHQpkinmNnxcUlKttjtXx5rr3hKSU60cA/pbz3hky7RlM.jpg?size=811x1080&quality=95&sign=9b142c4007a3200619ab1b09bacf4f08&type=album" />
+									<img style={{objectFit: "cover"}} src="https://sun9-80.userapi.com/impg/iCu0lPqTMBqw1c2aV9Ra5OiYd9Ki3yamQVkTfw/5Mw6yCkWOnU.jpg?size=811x1080&quality=96&sign=5d331e3f20502fcc4afa1b967d953635&type=album" />
+									<Placeholder
 										icon={<Icon56LockOutline />}
 										header="Фото скрыто"
 										action={<Button onClick={() => this.openSnackbar()} size="m">Запросить доступ</Button>}
 									>
-										Запрсите у @Alexander доступ к фото, чтобы посмотреть его
-									</Placeholder>*/}
+										Запрсите у @skgopnik доступ к фото, чтобы посмотреть его
+									</Placeholder>
 								</Gallery>
 								<div className="block-profile-img"></div>
 							</div>
 							<SimpleCell
 								className="block-avatar-profile"
-								before={<Avatar size={72} mode="app" src={photo} />}
+								before={<Avatar size={72} mode="app" src="https://sun9-61.userapi.com/impg/Uh2AlA6e_cswtjmOO_IVHJ0LhL3WxDUPPGjx1A/57_rE5bJkjA.jpg?size=453x604&quality=95&sign=6fd12c61ac91d70aaeea13faee160da5&type=album" />}
 								badge={<Icon12Verified />}
-								// для другого профиля
-								//after={<IconButton><Icon24MessageOutline width={30} height={30} /></IconButton>}
+								after={<IconButton><Icon24MessageOutline width={30} height={30} /></IconButton>}
 								description={<Text style={{color: "var(--text_secondary)"}}>80 м · 22 года</Text>}
 								disabled
 							>
-								<Title level="2" weight="bold">{first_name} {last_name}</Title>
+								<Title level="2" weight="bold">Артём Петрунин</Title>
 							</SimpleCell>
-							{/*У своего профиля*/}
-							<Div style={{display: "flex"}}>
-								<Button
-									stretched
-									size="m"
-									before={<Icon28EditOutline width={24} height={24} />}
-									mode="outline"
-									onClick={() => setPage('profile', 'editProfile')}
-								>
-									Редактировать информацию
-								</Button>
-							</Div>
-							{/*У другого профиля*/}
-							{/*
 							<Div style={{display: "flex"}}>
 								<Button
 									stretched
@@ -457,7 +342,6 @@ class ProfilePanel extends React.Component {
 									Подарок
 								</Button>
 							</Div>
-							*/}
 							<Div className="block-info-profile">
 								<Tappable className="position-info-profile">
 									<div className="text-info-profile-1">
@@ -492,7 +376,7 @@ class ProfilePanel extends React.Component {
 									textWrap="short"
 									textLevel="primary"
 								>
-									ВКонтакте начинался как сайт для выпускников вузов, а сейчас это огромная экосистема с безграничными возможностями и миллионами пользователей.
+									ВКонтакте начинался как сайт.
 								</MiniInfoCell>
 								<MiniInfoCell
 									before={<Icon20Search />}
@@ -506,42 +390,35 @@ class ProfilePanel extends React.Component {
 									textWrap="short"
 									textLevel="primary"
 								>
-									Минск
+									Москва
 								</MiniInfoCell>
 								<MiniInfoCell
 									before={<Icon20UserOutline />}
 									textWrap="short"
 									textLevel="primary"
 								>
-									Белый · 175см · 55 кг
+									Белый · 185см · 64 кг
 								</MiniInfoCell>
 								<MiniInfoCell
 									before={<Icon20LikeOutline />}
 									textWrap="short"
 									textLevel="primary"
 								>
-									В отношениях
-								</MiniInfoCell>
-								<MiniInfoCell
-									before={<Icon20VirusOutline />}
-									textWrap="short"
-									textLevel="primary"
-								>
-									Отрицательный · 30 октября 2021г.
+									В активном поиске
 								</MiniInfoCell>
 								<MiniInfoCell
 									before={<Icon20UsersOutline />}
 									textWrap="short"
 									textLevel="primary"
 								>
-									Гей · Уни
+									Натурал
 								</MiniInfoCell>
 								<MiniInfoCell
 									before={<Icon28HashtagOutline width={20} height={20} />}
 									textWrap="short"
 									textLevel="primary"
 								>
-									#Kiss #fetish #dogplay #gaymer
+									#Kiss
 								</MiniInfoCell>
 								<Spacing separator="center" />
 								<Header mode="primary" aside={<Link>Показать все</Link>}>Скрытые фото</Header>
@@ -569,7 +446,7 @@ class ProfilePanel extends React.Component {
 							onClick={() => this.setState({ activeTab: 'iPost' })}
 							selected={this.state.activeTab === 'iPost'}
 						>
-							Мои записи
+							Записи Артёма
 						</TabsItem>
 					</Tabs>
 					<Spacing separator="top" />
@@ -579,7 +456,6 @@ class ProfilePanel extends React.Component {
 							badge={<Icon12Verified />}
 							after={<IconButton><Icon28MoreVertical /></IconButton>}
 							description="вчера в 19:35"
-							onClick={() => setPage('profile', 'userProfile')}
 						>
 							Артём Петрунин
 						</SimpleCell>
@@ -646,7 +522,7 @@ class ProfilePanel extends React.Component {
 							onClick={() => this.setState({ activeTab: 'iPost' })}
 							selected={this.state.activeTab === 'iPost'}
 						>
-							Мои записи
+							Записи Артёма
 						</TabsItem>
 					</Tabs>
 					<Spacing separator="top" />
@@ -689,7 +565,8 @@ class ProfilePanel extends React.Component {
 const mapDispatchToProps = {
   setPage,
   openPopout,
-  closePopout
+  closePopout,
+	goBack
 };
 
-export default connect(null, mapDispatchToProps)(ProfilePanel);
+export default connect(null, mapDispatchToProps)(UserProfilePanel);

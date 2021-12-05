@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux'
 import {goBack, closeModal, setStory} from "./js/store/router/actions";
 import {getActivePanel} from "./js/services/_functions";
+import bridge from '@vkontakte/vk-bridge';
 
 import {
   Epic, 
@@ -23,30 +24,48 @@ import {
   Panel,
   Group,
   Counter,
-  PromoBanner
+  SimpleCell,
+  Avatar,
+  Button,
+  Spacing,
+  IconButton
 } from "@vkontakte/vkui";
 
 import { 
+  Icon24Dismiss,
   Icon28AddSquareOutline,
   Icon28MessagesOutline, 
   Icon28Newsfeed, 
   Icon28Profile, 
+  Icon28SettingsOutline, 
   Icon28Users3Outline
 } from '@vkontakte/icons';
 
 import HomePanel from './js/panels/home/base';
 import NotificationsPanel from './js/panels/home/notifications';
+import GiftsPanel from './js/panels/home/gifts';
+import GiftPanel from './js/panels/home/gift';
+import StoryUsersPanel from './js/panels/home/storyUsers';
 
 import PeoplePanel from './js/panels/people/base';
+import FilterPanel from './js/panels/people/filter';
 
 import AddPanel from './js/panels/add/base';
 
 import ChatPanel from './js/panels/chat/base';
 
 import ProfilePanel from './js/panels/profile/base';
+import SettingsPanel from './js/panels/profile/settings';
+import UserProfilePanel from './js/panels/profile/userProfile';
+import EditProfilePanel from './js/panels/profile/editProfile';
 
-import HomeBotsListModal from './js/components/modals/HomeBotsListModal';
-import HomeBotInfoModal from './js/components/modals/HomeBotInfoModal';
+import HomeGiftsModal from './js/components/modals/HomeGiftsModal';
+
+var infouser = 0
+var first_name = 'Загрузка...'
+var last_name
+var user_id
+var photo
 
 class App extends React.Component {
   constructor(props) {
@@ -55,7 +74,11 @@ class App extends React.Component {
     this.state = {
       hasHeader: true,
       isDesktop: false,
-      Platform: platform()
+      Platform: platform(),
+      first_name: first_name,
+			last_name: last_name,
+			user_id: user_id,
+      photo: photo
     }
 
     this.lastAndroidBackAction = 0;
@@ -72,6 +95,9 @@ class App extends React.Component {
         Platform: VKCOM
       })
     }
+    if (infouser === 0) {
+			this.getInfoUser();
+		}
 
     window.onpopstate = () => {
       let timeNow = +new Date();
@@ -100,9 +126,26 @@ class App extends React.Component {
     }
   }
 
+	async getInfoUser() {
+		//this.props.openPopout(<ScreenSpinner/>)
+
+		let user_info = await bridge.send('VKWebAppGetUserInfo');
+		first_name = user_info.first_name
+		last_name = user_info.last_name
+		photo = user_info.photo_200
+		user_id = user_info.id
+		this.setState({
+      first_name: first_name,
+			last_name: last_name,
+			user_id: user_id,
+			photo: photo,
+		});
+		infouser = 1
+	}
+
   render() {
     const {goBack, setStory, closeModal, popouts, activeView, activeStory, activeModals, panelsHistory} = this.props;
-    const { isDesktop, hasHeader, Platform } = this.state
+    const { isDesktop, hasHeader, Platform, photo, first_name, last_name, user_id } = this.state
 
     let history = (panelsHistory[activeView] === undefined) ? [activeView] : panelsHistory[activeView];
     let popout = (popouts[activeView] === undefined) ? null : popouts[activeView];
@@ -110,24 +153,12 @@ class App extends React.Component {
 
     const homeModals = (
       <ModalRoot activeModal={activeModal}>
-        
+        <HomeGiftsModal
+          id="MODAL_PAGE_GIFTS_HOME"
+          onClose={() => closeModal()}
+        />
       </ModalRoot>
     );
-
-    const promoBannerProps = {
-      title: 'Заголовок sfdfsdf sfsdfs',
-      domain: 'vk.com',
-      trackingLink: 'https://vk.com',
-      ctaText: 'Перейти',
-      advertisingLabel: 'Реклама',
-      iconLink: 'https://sun9-7.userapi.com/c846420/v846420985/1526c3/ISX7VF8NjZk.jpg',
-      description: 'Описание рекламы',
-      ageRestrictions: "14+",
-      statistics: [
-        { url: '', type: 'playbackStarted' },
-        { url: '', type: 'click' }
-      ]
-    };
 
     return (     
       <ConfigProvider platform={Platform} isWebView={true} webviewType='internal'>
@@ -179,7 +210,7 @@ class App extends React.Component {
                     selected={activeStory === 'profile'}
                     text='Профиль'
                   >
-                    <Icon28Profile/>
+                    <Avatar style={activeStory === 'profile' ? {outline: '1px solid var(--tabbar_active_icon)', outlineOffset: '1px'} : {}} size={28} src={photo} />
                   </TabbarItem>
                 </Tabbar>}>
                   <Root id="home" activeView={activeView} popout={popout}>
@@ -190,8 +221,12 @@ class App extends React.Component {
                       history={history}
                       onSwipeBack={() => goBack()}
                     >
-                      <HomePanel id="base" withoutEpic={false}/>
-                      <NotificationsPanel id="notifications"/>
+                      <HomePanel id="base" withoutEpic={false} platform={Platform}/>
+                      <NotificationsPanel id="notifications" platform={Platform}/>
+                      <GiftPanel id="gift" platform={Platform}/>
+                      <GiftsPanel id="gifts" platform={Platform}/>
+                      <UserProfilePanel id="userProfile" withoutEpic={false} platform={Platform}/>
+                      <StoryUsersPanel id="storyUsers" withoutEpic={false} platform={Platform}/>
                     </View>
                   </Root>
                   <Root id="people" activeView={activeView} popout={popout}>
@@ -202,7 +237,8 @@ class App extends React.Component {
                       history={history}
                       onSwipeBack={() => goBack()}
                     >
-                      <PeoplePanel id="base" withoutEpic={false}/>
+                      <PeoplePanel id="base" withoutEpic={false} platform={Platform}/>
+                      <FilterPanel id="filter" withoutEpic={false} platform={Platform}/>
                     </View>
                   </Root>
                   <Root id="add" activeView={activeView} popout={popout}>
@@ -235,7 +271,10 @@ class App extends React.Component {
                       history={history}
                       onSwipeBack={() => goBack()}
                     >
-                      <ProfilePanel id="base"/>
+                      <ProfilePanel id="base" withoutEpic={false} platform={Platform}/>
+                      <SettingsPanel id="settings" withoutEpic={false} platform={Platform}/>
+                      <UserProfilePanel id="userProfile" withoutEpic={false} platform={Platform}/>
+                      <EditProfilePanel id="editProfile" withoutEpic={false} platform={Platform}/>
                     </View>
                   </Root>
                 </Epic>
@@ -246,6 +285,18 @@ class App extends React.Component {
                   <Panel id='menuDesktop'>
                     {hasHeader && <PanelHeader/>}
                     <Group>
+                      <Cell
+                        onClick={() => setStory('profile', 'base')}
+                        disabled={activeStory === 'profile'}
+                        before={<Avatar style={activeStory === 'profile' ? {outline: '2px solid var(--tabbar_active_icon)', outlineOffset: '2px'} : {}} size={28} src={photo} />}
+                        style={ activeStory === 'profile' ? {
+                          backgroundColor: 'var(--button_secondary_background)',
+                          borderRadius: 8
+                        } : {}}
+                      >
+                        Профиль
+                      </Cell>
+                      <Spacing separator="center" />
                       <Cell
                         onClick={() => setStory('home', 'base')}
                         disabled={activeStory === 'home'}
@@ -280,17 +331,6 @@ class App extends React.Component {
                       >
                         Сообщения
                       </Cell>
-                      <Cell
-                        onClick={() => setStory('profile', 'base')}
-                        disabled={activeStory === 'profile'}
-                        before={<Icon28Profile/>}
-                        style={ activeStory === 'profile' ? {
-                          backgroundColor: 'var(--button_secondary_background)',
-                          borderRadius: 8
-                        } : {}}
-                      >
-                        Профиль
-                      </Cell>
                     </Group>
                     <Group>
                       <Cell
@@ -305,8 +345,17 @@ class App extends React.Component {
                         Добавить запись
                       </Cell>
                     </Group>
-                    <Group>
-                      <PromoBanner bannerData={promoBannerProps} />
+                    <Group header={<div style={{color: "var(--text_secondary)", fontSize: "13px", fontWeight: "400"}}><div style={{display: "flex"}}><div style={{marginTop: "auto", marginBottom: "auto"}}>Реклама 14+</div><div style={{marginLeft: "auto"}}><Icon24Dismiss /></div></div></div>}>
+                      <SimpleCell
+                        before={<Avatar mode="app" size={48} src="" />}
+                        description="vk.com"
+                        style={{padding: "0px 0px"}}
+                        disabled
+                        multiline
+                      >
+                        <div className="addBanner">Заголовок sfdfsdf sfsdfs ddfsdfds Заголовок sfdfsdf sfsdfs ddfsdfds Заголовок sfdfsdf sfsdfs ddfsdfds</div>
+                      </SimpleCell>
+                      <Button style={{marginTop: 5}} stretched mode="outline">Перейти</Button>
                     </Group>
                   </Panel>
                 </SplitCol>
