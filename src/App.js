@@ -166,13 +166,13 @@ class App extends React.Component {
           <AppRoot>
             <SplitLayout
               header={hasHeader && <PanelHeader separator={false} />}
-              style={{ justifyContent: "center" }}
+              style={{justifyContent: "center"}}
             >
               <SplitCol
                 animate={!isDesktop}
-                spaced={isDesktop}
-                width={isDesktop ? '700px' : '100%'}
-                maxWidth={isDesktop ? '700px' : '100%'}
+                spaced={0}
+                width={isDesktop ? '734px' : '100%'}
+                maxWidth={isDesktop ? '734px' : '100%'}
               >   
                 <Epic activeStory={activeStory} tabbar={ !isDesktop && 
                 <Tabbar>
@@ -281,7 +281,7 @@ class App extends React.Component {
               </SplitCol>
 
               {isDesktop && (
-                <SplitCol fixed width='250px' maxWidth='250px'>
+                <SplitCol fixed width='250px' maxWidth='250px' style={{marginLeft: "16px"}}>
                   <Panel id='menuDesktop'>
                     {hasHeader && <PanelHeader/>}
                     <Group>

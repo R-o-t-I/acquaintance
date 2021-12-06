@@ -188,7 +188,7 @@ class PeoplePanel extends React.Component {
 							>
 								Люди
 							</PanelHeader>
-								<div style={{position: "relative"}}>
+								<div className="block-card-people">
 									<img src="https://sun9-38.userapi.com/impf/c854224/v854224036/a1aef/klD5bu0WkuU.jpg?size=2560x1440&quality=96&sign=dfd0778c6f06f69789b43bb41d57af2d&type=album" className="card-people" />
 									<div className="button-done-card-people"><Icon28DoneOutline style={{margin: "auto", marginTop: 10, color: "#FFFFFF"}} /></div>
 									<div className="button-dismiss-card-people"><Icon28CancelOutline style={{margin: "auto", marginTop: 10, color: "#FFFFFF"}} /></div>
