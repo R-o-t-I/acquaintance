@@ -160,7 +160,8 @@ class UserProfilePanel extends React.Component {
 							<Group style={{marginTop: 10}}>
 								<Gallery
 									slideWidth="100%"
-									style={{ height: 300, width: 300, borderRadius: "8px 8px 0px 0px" }}
+									style={{ height: 316, width: 316, borderRadius: "8px 8px 0px 0px" }}
+									className="gallery"
 									bullets="light"
 									showArrows
 								>

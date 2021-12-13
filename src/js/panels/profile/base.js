@@ -71,11 +71,13 @@ import bridge from '@vkontakte/vk-bridge';
 
 import queryGet from '../../../functions/query_get.jsx';
 
+import chel from '../../../img/chel.svg'
+
 var infouser = 0
 var first_name = 'Загрузка...'
 var last_name
 var user_id
-var photo
+var photo = chel
 
 class ProfilePanel extends React.Component {
 	constructor(props) {

@@ -25,7 +25,7 @@ import {
     IOS
 } from '@vkontakte/vkui'
 
-import { Dropdown } from '@vkontakte/vkui/dist/unstable';
+import { RichTooltip } from '@vkontakte/vkui/dist/unstable';
 import '@vkontakte/vkui/dist/unstable.css' // CSS достаточно подключить один раз 
 
 import bridge from '@vkontakte/vk-bridge';
@@ -208,7 +208,7 @@ openImg() {
                   before={<Avatar size={48} src="" />}
                   badge={<Icon12Verified />}
                   after={
-                    <Dropdown
+                    <RichTooltip
                       action="hover"
                       placement="bottom"
                       content={
@@ -219,7 +219,7 @@ openImg() {
                       }
                     >
                       <IconButton onClick={platform != VKCOM ? () => this.openInteractionAcquaintance2() : undefined}><Icon28MoreVertical /></IconButton>
-                    </Dropdown>
+                    </RichTooltip>
                   }
                   description="вчера в 19:35"
                 >
@@ -228,7 +228,7 @@ openImg() {
                 <Div>Всем привет!</Div>
                 <div className="allBlockIconPost">
                   <div style={{display: "flex"}}>
-                    <Dropdown
+                    <RichTooltip
                       action="hover"
                       placement="top"
                       style={{margin: "0px 10px"}}
@@ -251,7 +251,7 @@ openImg() {
                         <Icon28LikeOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
                         <div className="indicatorblockIconPost">11</div>
                       </Tappable>
-                    </Dropdown>
+                    </RichTooltip>
                     <Tappable style={{marginLeft: "10px"}} className="blockIconPost">
                       <Icon28CommentOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
                       <div className="indicatorblockIconPost">11</div>
@@ -270,7 +270,7 @@ openImg() {
                   before={<Avatar size={48} src="" />}
                   badge={<Icon12Verified />}
                   after={
-                    <Dropdown
+                    <RichTooltip
                       action="hover"
                       placement="bottom"
                       content={
@@ -281,7 +281,7 @@ openImg() {
                       }
                     >
                       <IconButton onClick={platform != VKCOM ? () => this.openInteractionAcquaintance() : undefined}><Icon28MoreVertical /></IconButton>
-                    </Dropdown>
+                    </RichTooltip>
                   }
                   description="вчера в 15:12"
                 >
@@ -291,7 +291,7 @@ openImg() {
                 <Div><img onClick={this.openImg} className="imgPost" src="https://img2.akspic.ru/originals/1/7/1/5/6/165171-zemlya-oblako-atmosfera-poslesvechenie-zakat-1080x1920.jpg" /></Div>
                 <div className="allBlockIconPost">
                   <div style={{display: "flex"}}>
-                  <Dropdown
+                  <RichTooltip
                     action="hover"
                     placement="top"
                     style={{margin: "0px 10px"}}
@@ -314,7 +314,7 @@ openImg() {
                       <Icon28LikeOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
                       <div className="indicatorblockIconPost">11</div>
                     </Tappable>
-                  </Dropdown>
+                  </RichTooltip>
                     <Tappable style={{marginLeft: "10px"}} className="blockIconPost">
                       <Icon28CommentOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
                       <div className="indicatorblockIconPost">11</div>

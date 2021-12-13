@@ -61,11 +61,13 @@ import EditProfilePanel from './js/panels/profile/editProfile';
 
 import HomeGiftsModal from './js/components/modals/HomeGiftsModal';
 
+import chel from './img/chel.svg'
+
 var infouser = 0
 var first_name = 'Загрузка...'
 var last_name
 var user_id
-var photo
+var photo = chel
 
 class App extends React.Component {
   constructor(props) {
