@@ -1,12 +1,13 @@
 {
-  "main.css": "/acquaintance/static/css/main.f37ebc5f.chunk.css",
-  "main.js": "/acquaintance/static/js/main.1ec141c4.chunk.js",
-  "runtime~main.js": "/acquaintance/static/js/runtime~main.72bb19b3.js",
+  "main.css": "/acquaintance/static/css/main.b0cf9d3b.chunk.css",
+  "main.js": "/acquaintance/static/js/main.db924608.chunk.js",
+  "runtime~main.js": "/acquaintance/static/js/runtime~main.18c37c33.js",
   "static/css/2.21a4ec7d.chunk.css": "/acquaintance/static/css/2.21a4ec7d.chunk.css",
-  "static/js/2.c1e21919.chunk.js": "/acquaintance/static/js/2.c1e21919.chunk.js",
-  "static/js/3.4ee40c12.chunk.js": "/acquaintance/static/js/3.4ee40c12.chunk.js",
-  "static/js/4.904e90a4.chunk.js": "/acquaintance/static/js/4.904e90a4.chunk.js",
+  "static/js/2.ef4ee891.chunk.js": "/acquaintance/static/js/2.ef4ee891.chunk.js",
+  "static/js/3.04bdb6c4.chunk.js": "/acquaintance/static/js/3.04bdb6c4.chunk.js",
+  "static/js/4.22216f26.chunk.js": "/acquaintance/static/js/4.22216f26.chunk.js",
   "index.html": "/acquaintance/index.html",
-  "precache-manifest.47de0437500123786a05640c53d2e3e2.js": "/acquaintance/precache-manifest.47de0437500123786a05640c53d2e3e2.js",
-  "service-worker.js": "/acquaintance/service-worker.js"
+  "precache-manifest.eaf9c195359e20011ad4aa21dc97d7df.js": "/acquaintance/precache-manifest.eaf9c195359e20011ad4aa21dc97d7df.js",
+  "service-worker.js": "/acquaintance/service-worker.js",
+  "static/media/chel.svg": "/acquaintance/static/media/chel.53bf9ecf.svg"
 }
