@@ -26,10 +26,13 @@ import {
 	Button,
 	Snackbar,
 	VKCOM,
-	Group
+	Group,
+	CardGrid,
+	Card
 } from '@vkontakte/vkui/';
 
-import { ChipsSelect } from '@vkontakte/vkui/dist/unstable';
+import { RichTooltip, ChipsSelect } from '@vkontakte/vkui/dist/unstable';
+import '@vkontakte/vkui/dist/unstable.css' // CSS достаточно подключить один раз 
 
 import {
 	Icon16Done,
@@ -86,6 +89,27 @@ class FilterPanel extends React.Component {
 					Исследуй мир
 				</SimpleCell>
 				<Spacing separator={true} size={8} />
+				<Header mode="primary">Мне интересны</Header>
+				<CardGrid size="s">
+          <Card>
+            <div style={{padding: "10% 0%", marginTop: "auto", marginBottom: "auto"}}>
+							<Icon28LocationMapOutline width={60} height={60} style={{color: "var(--accent)", marginLeft: "auto", marginRight: "auto", marginBottom: "10px"}} />
+							<div style={{textAlign: "center"}}>Все</div>
+						</div>
+          </Card>
+          <Card>
+						<div style={{padding: "10% 0%", marginTop: "auto", marginBottom: "auto"}}>
+							<Icon28LocationMapOutline width={60} height={60} style={{color: "var(--accent)", marginLeft: "auto", marginRight: "auto", marginBottom: "10px"}} />
+							<div style={{textAlign: "center"}}>Парни</div>
+						</div>
+          </Card>
+          <Card>
+						<div style={{padding: "10% 0%", marginTop: "auto", marginBottom: "auto"}}>
+							<Icon28LocationMapOutline width={60} height={60} style={{color: "var(--accent)", marginLeft: "auto", marginRight: "auto", marginBottom: "10px"}} />
+							<div style={{textAlign: "center"}}>Девушки</div>
+						</div>
+          </Card>
+        </CardGrid>
 				<Header mode="primary" aside="18-100">Возраст</Header>
 				<FormItem>
 					<RangeSlider
@@ -95,7 +119,30 @@ class FilterPanel extends React.Component {
 						defaultValue={[33, 70]}
 					/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>Рост</Header>
+				<Header mode="primary">Только онлайн</Header>
+				<AdaptivityProvider>
+					<Cell multiline after={<Switch />}>
+						Отображать только тех пользователей, которые сейчас онлайн
+					</Cell>
+				</AdaptivityProvider>
+				<Header
+					mode="primary"
+					aside={
+						<RichTooltip
+							action="hover"
+							placement="bottom"
+							content={
+								<Div>
+									Функция доступна с премиум аккаунтом
+								</Div>
+							}
+						>
+							<Icon28DonateCircleFillYellow />
+						</RichTooltip>
+					}
+				>
+					Рост
+				</Header>
 				<FormItem>
 					<RangeSlider
 						min={50}
@@ -105,7 +152,24 @@ class FilterPanel extends React.Component {
 						disabled
 					/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>Вес</Header>
+				<Header
+					mode="primary"
+					aside={
+						<RichTooltip
+							action="hover"
+							placement="bottom"
+							content={
+								<Div>
+									Функция доступна с премиум аккаунтом
+								</Div>
+							}
+						>
+							<Icon28DonateCircleFillYellow />
+						</RichTooltip>
+					}
+				>
+					Вес
+				</Header>
 				<FormItem>
 					<RangeSlider
 						min={40}
@@ -115,7 +179,24 @@ class FilterPanel extends React.Component {
 						disabled
 					/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>Роль в сексе</Header>
+				<Header
+					mode="primary"
+					aside={
+						<RichTooltip
+							action="hover"
+							placement="bottom"
+							content={
+								<Div>
+									Функция доступна с премиум аккаунтом
+								</Div>
+							}
+						>
+							<Icon28DonateCircleFillYellow />
+						</RichTooltip>
+					}
+				>
+					Роль в сексе
+				</Header>
 				<FormItem>
 				<CustomSelect
 					placeholder="Не выбрано"
@@ -130,7 +211,24 @@ class FilterPanel extends React.Component {
 					}}
 				/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>Семейное положение</Header>
+				<Header
+					mode="primary"
+					aside={
+						<RichTooltip
+							action="hover"
+							placement="bottom"
+							content={
+								<Div>
+									Функция доступна с премиум аккаунтом
+								</Div>
+							}
+						>
+							<Icon28DonateCircleFillYellow />
+						</RichTooltip>
+					}
+				>
+					Семейное положение
+				</Header>
 				<FormItem>
 				<CustomSelect
 					placeholder="Не выбрано"
@@ -145,7 +243,24 @@ class FilterPanel extends React.Component {
 					}}
 				/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>Ищу для</Header>
+				<Header
+					mode="primary"
+					aside={
+						<RichTooltip
+							action="hover"
+							placement="bottom"
+							content={
+								<Div>
+									Функция доступна с премиум аккаунтом
+								</Div>
+							}
+						>
+							<Icon28DonateCircleFillYellow />
+						</RichTooltip>
+					}
+				>
+					Ищу для
+				</Header>
 				<FormItem>
 				<ChipsSelect
 					placeholder="Не выбрано"
@@ -160,7 +275,24 @@ class FilterPanel extends React.Component {
 					}}
 				/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>Ориентация</Header>
+				<Header
+					mode="primary"
+					aside={
+						<RichTooltip
+							action="hover"
+							placement="bottom"
+							content={
+								<Div>
+									Функция доступна с премиум аккаунтом
+								</Div>
+							}
+						>
+							<Icon28DonateCircleFillYellow />
+						</RichTooltip>
+					}
+				>
+					Ориентация
+				</Header>
 				<FormItem>
 				<CustomSelect
 					placeholder="Не выбрано"
@@ -175,7 +307,24 @@ class FilterPanel extends React.Component {
 					}}
 				/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>ВИЧ-статус</Header>
+				<Header
+					mode="primary"
+					aside={
+						<RichTooltip
+							action="hover"
+							placement="bottom"
+							content={
+								<Div>
+									Функция доступна с премиум аккаунтом
+								</Div>
+							}
+						>
+							<Icon28DonateCircleFillYellow />
+						</RichTooltip>
+					}
+				>
+					ВИЧ-статус
+				</Header>
 				<FormItem>
 				<CustomSelect
 					placeholder="Не выбрано"
@@ -190,12 +339,6 @@ class FilterPanel extends React.Component {
 					}}
 				/>
 				</FormItem>
-				<Header mode="primary" aside={<Icon28DonateCircleFillYellow />}>Только онлайн</Header>
-				<AdaptivityProvider sizeY="compact">
-					<Cell multiline after={<Switch disabled />}>
-						Отображать только тех пользователей, который сейчас онлайн
-					</Cell>
-				</AdaptivityProvider>
 				<Div>
 					<Button
 						stretched
