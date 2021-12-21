@@ -1,14 +1,15 @@
 {
-  "main.css": "/acquaintance/static/css/main.fc52c373.chunk.css",
-  "main.js": "/acquaintance/static/js/main.869a1c3d.chunk.js",
-  "runtime~main.js": "/acquaintance/static/js/runtime~main.d9261d8e.js",
+  "main.css": "/acquaintance/static/css/main.84a2d0f2.chunk.css",
+  "main.js": "/acquaintance/static/js/main.b19b41d6.chunk.js",
+  "runtime~main.js": "/acquaintance/static/js/runtime~main.17ce824f.js",
   "static/css/2.21a4ec7d.chunk.css": "/acquaintance/static/css/2.21a4ec7d.chunk.css",
-  "static/js/2.1bfbc45e.chunk.js": "/acquaintance/static/js/2.1bfbc45e.chunk.js",
-  "static/js/3.fc530736.chunk.js": "/acquaintance/static/js/3.fc530736.chunk.js",
-  "static/js/4.0700fe04.chunk.js": "/acquaintance/static/js/4.0700fe04.chunk.js",
+  "static/js/2.aea3948c.chunk.js": "/acquaintance/static/js/2.aea3948c.chunk.js",
+  "static/js/3.f7fdc6cd.chunk.js": "/acquaintance/static/js/3.f7fdc6cd.chunk.js",
+  "static/js/4.2a0c19f0.chunk.js": "/acquaintance/static/js/4.2a0c19f0.chunk.js",
   "index.html": "/acquaintance/index.html",
-  "precache-manifest.e86deb6167523929d259294dcd270814.js": "/acquaintance/precache-manifest.e86deb6167523929d259294dcd270814.js",
+  "precache-manifest.fe988f1477ebe72287980dc5917c20a6.js": "/acquaintance/precache-manifest.fe988f1477ebe72287980dc5917c20a6.js",
   "service-worker.js": "/acquaintance/service-worker.js",
   "static/media/OKLogo.svg": "/acquaintance/static/media/OKLogo.dc387f44.svg",
+  "static/media/logo.svg": "/acquaintance/static/media/logo.c98b7b20.svg",
   "static/media/noUserImage.jpeg": "/acquaintance/static/media/noUserImage.63f39829.jpeg"
 }
