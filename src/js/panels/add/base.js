@@ -41,7 +41,7 @@ class AddPanel extends React.Component {
 
         return (
             <Panel id={id}>
-              <PanelHeader noShadow={true}>Добавить запись</PanelHeader>
+              <PanelHeader>Добавить запись</PanelHeader>
               <Group>
                 <FormItem top="Поделитесь со всеми">
                   <Textarea placeholder="Что у Вас нового?" />

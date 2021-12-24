@@ -17,7 +17,8 @@ import {
   Cell,
 	Div,
 	Button,
-	FixedLayout
+	FixedLayout,
+	Spacing
 } from "@vkontakte/vkui";
 
 import bridge from '@vkontakte/vk-bridge';
@@ -53,13 +54,13 @@ class GiftPanel extends React.Component {
 					<Cell multiline after={<Switch aria-label="Видимость подарка" />}>
 						Ваше имя и текст видны всем
 					</Cell>
-				</Group>
-				<FixedLayout vertical="bottom">
+					<Spacing separator="center" />
 					<Div className="buttonGiftBlock">
 						<div style={{marginTop: "-7px", marginBottom: "7px"}}>У Вас 100 coin</div>
 						<Button stretched mode="commerce" size="l"><div style={{display: "flex", marginTop: "auto", marginBottom: "auto"}}>Отправить за 1 coin <Icon28CoinsOutline style={{marginLeft: "5px", marginTop: "auto", marginBottom: "auto"}} width={24} height={24} /></div></Button>
 					</Div>
-				</FixedLayout>
+				</Group>
+				
 			</Panel>
 		);
 	}

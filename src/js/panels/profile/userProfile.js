@@ -9,7 +9,6 @@ import {
     Div,
     Group,
     CellButton,
-		PanelHeaderButton,
 		PanelHeaderContent,
 		PanelHeaderContext,
 		List,
@@ -26,20 +25,15 @@ import {
 		Avatar,
 		IconButton,
 		Link,
-		RichCell,
 		Header,
 		Spacing,
 		VKCOM,
-		platform,
 		Snackbar,
 		PanelHeaderBack
 } from "@vkontakte/vkui";
+
 import {
-    Icon28SchoolOutline,
-    Icon28AddOutline,
-		Icon28SettingsOutline,
 		Icon16Dropdown,
-		Icon24Done,
 		Icon28LogoVk,
 		Icon28CopyOutline,
 		Icon28ShareOutline,
@@ -51,8 +45,6 @@ import {
 		Icon20PlaceOutline,
 		Icon20UserOutline,
 		Icon20LikeOutline,
-		Icon20AccessibilityOutline,
-		Icon20VirusOutline,
 		Icon20UsersOutline,
 		Icon28HashtagOutline,
 		Icon24UserAddOutline,
@@ -63,7 +55,6 @@ import {
 		Icon28CommentOutline,
 		Icon28GiftOutline,
 		Icon28MoreVertical,
-		Icon28EditOutline,
 		Icon12ChevronOutline,
 		Icon16Done
 } from '@vkontakte/icons';
@@ -116,7 +107,7 @@ class UserProfilePanel extends React.Component {
 						@skgopnik
 					</PanelHeaderContent>
 				</PanelHeader>
-				<PanelHeaderContext opened={this.state.contextOpened} onClose={this.toggleContext}>
+				<PanelHeaderContext className={platform === VKCOM ? 'panelHeaderPC' : undefined} opened={this.state.contextOpened} onClose={this.toggleContext}>
 					<List>
 						<CellButton 
 							before={<Icon28LogoVk />}

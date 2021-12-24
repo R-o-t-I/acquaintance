@@ -33,9 +33,10 @@ import {
 	platform,
 	Snackbar
 } from "@vkontakte/vkui";
+
 import {
-    Icon28SchoolOutline,
-    Icon28AddOutline,
+  Icon28SchoolOutline,
+  Icon28AddOutline,
 	Icon28SettingsOutline,
 	Icon16Dropdown,
 	Icon24Done,
@@ -71,13 +72,13 @@ import bridge from '@vkontakte/vk-bridge';
 
 import queryGet from '../../../functions/query_get.jsx';
 
-import chel from '../../../img/chel.svg'
+import noUserImage from '../../../img/noUserImage.jpeg'
 
 var infouser = 0
 var first_name = 'Загрузка...'
 var last_name
 var user_id
-var photo = chel
+var photo = noUserImage
 
 class ProfilePanel extends React.Component {
 	constructor(props) {
@@ -194,7 +195,7 @@ class ProfilePanel extends React.Component {
 						</PanelHeader>
 					)
 				}
-				<PanelHeaderContext opened={this.state.contextOpened} onClose={this.toggleContext}>
+				<PanelHeaderContext className={platform === VKCOM ? 'panelHeaderPC' : undefined} opened={this.state.contextOpened} onClose={this.toggleContext}>
 					<List>
 						<CellButton 
 							before={<Icon28LogoVk />}
@@ -558,6 +559,11 @@ class ProfilePanel extends React.Component {
 						</div>
 					)
 				}
+				<Div>
+					<Button onClick={() => setPage('profile', 'login')}>
+						Вход/Регистрация
+					</Button>
+				</Div>
 				{this.state.activeTab === "allPost" ? <div>
 				<Group>
 					<Tabs>

@@ -12,14 +12,14 @@ import {
   List,
   CellButton,
   Avatar,
-  FixedLayout,
   WriteBar,
   WriteBarIcon,
   Progress,
-  Div
+  Div,
+  VKCOM
 } from "@vkontakte/vkui";
 
-import { RichTooltip } from '@vkontakte/vkui/dist/unstable';
+import { Dropdown, RichTooltip } from '@vkontakte/vkui/dist/unstable';
 import '@vkontakte/vkui/dist/unstable.css' // CSS достаточно подключить один раз 
 
 import {
@@ -51,13 +51,14 @@ class StoryUsersPanel extends React.Component {
     }
 
     render() {
-        const {id, setPage, goBack} = this.props;
+        const {id, setPage, goBack, platform} = this.props;
 
         return (
             <Panel id={id}>
               <PanelHeader
                 separator={false}
                 left={<PanelHeaderButton onClick={() => goBack()}><Icon28CancelOutline/></PanelHeaderButton>}
+                className="panelHeaderMini"
               >
                 <PanelHeaderContent
                   status="был сегодня, в 18:46"
@@ -68,7 +69,7 @@ class StoryUsersPanel extends React.Component {
                   Артём Петрунин
                 </PanelHeaderContent>
               </PanelHeader>
-              <PanelHeaderContext opened={this.state.contextOpened} onClose={this.toggleContext}>
+              <PanelHeaderContext className="panelHeaderMini" className={platform === VKCOM ? 'panelHeaderMiniPC' : undefined} opened={this.state.contextOpened} onClose={this.toggleContext}>
                 <List>
                   <CellButton
                     before={<Icon28Profile />}
@@ -99,23 +100,25 @@ class StoryUsersPanel extends React.Component {
               </PanelHeaderContext>
               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/2006-09-15_18-47-19_ziaja.jpg/1200px-2006-09-15_18-47-19_ziaja.jpg" className="img-story" />
               <Progress className="progress-story" value={40} />
-              <FixedLayout vertical="bottom">
+              <div>
                 <div className="writeBar-story">
                   <WriteBar
                     placeholder="Сообщение"
                     inlineAfter={
                       <Fragment>
-                        <RichTooltip
-                          style={{maxWidth: 320}}
+                        <Dropdown
+                          className="dropdownStory"
+                          action="click"
                           placement="top"
-                          offsetDistance={0}
                           content={
-                            <Div>text</Div>
+                            <div>
+                              <img className="imgDropdownStory" src="https://getemoji.com/assets/og/mobile.png" />
+                            </div>
                           }>
                           <WriteBarIcon>
                             <Icon28SmileOutline />
                           </WriteBarIcon>
-                        </RichTooltip>
+                        </Dropdown>
                       </Fragment>
                     }
                     after={
@@ -131,7 +134,7 @@ class StoryUsersPanel extends React.Component {
                     }
                   />
                 </div>
-              </FixedLayout>
+              </div>
             </Panel>
         );
     }

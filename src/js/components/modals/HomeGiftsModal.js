@@ -10,10 +10,7 @@ import {
   withPlatform, 
   IOS,
   Group,
-  CardGrid,
-  Card,
-  Div,
-  FixedLayout
+  Div
 } from "@vkontakte/vkui";
 
 import {

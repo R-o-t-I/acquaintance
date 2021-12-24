@@ -46,13 +46,13 @@ class SettingsPanel extends React.Component {
 				</PanelHeader>
 				<Group>
 					<List>
-						<Cell expandable multiline before={<Icon28EditOutline />}>Редактировать информацию профиля</Cell>
-            <Cell expandable multiline before={<Icon28Notifications />}>Уведомления</Cell>
-            <Cell expandable multiline before={<Icon28PrivacyOutline />}>Приватность</Cell>
-            <Cell expandable multiline before={<Icon28BlockOutline />}>Черный список</Cell>
-            <Cell expandable multiline before={<Icon28HideOutline />}>Скрытые авторы</Cell>
-						<Cell expandable multiline before={<Icon28LockOutline />}>Доступ к скрытым фото</Cell>
-            <Cell expandable multiline before={<Icon28DonateOutline />}>Премиум аккаунт</Cell>
+						<Cell onClick={() => setPage('profile', 'editProfile')} expandable multiline before={<Icon28EditOutline />}>Редактировать информацию профиля</Cell>
+            <Cell onClick={() => setPage('profile', 'settingsNotifications')} expandable multiline before={<Icon28Notifications />}>Уведомления</Cell>
+            <Cell onClick={() => setPage('profile', 'privacy')} expandable multiline before={<Icon28PrivacyOutline />}>Приватность</Cell>
+            <Cell onClick={() => setPage('profile', 'blockUsers')} expandable multiline before={<Icon28BlockOutline />}>Черный список</Cell>
+            <Cell onClick={() => setPage('profile', 'blockPost')} expandable multiline before={<Icon28HideOutline />}>Скрытые авторы</Cell>
+						<Cell onClick={() => setPage('profile', 'hiddenPhotos')} expandable multiline before={<Icon28LockOutline />}>Доступ к скрытым фото</Cell>
+            <Cell onClick={() => setPage('profile', 'premium')} expandable multiline before={<Icon28DonateOutline />}>Премиум аккаунт</Cell>
 					</List>
         </Group>
         <Footer>Версия: 0.0.1</Footer>

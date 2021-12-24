@@ -7,18 +7,12 @@ import {
   Panel, 
   PanelHeader, 
   PanelHeaderBack, 
-  Placeholder,
   Group,
-  platform,
   VKCOM,
   SimpleCell,
   Avatar,
   Link
 } from "@vkontakte/vkui";
-
-import {
-  Icon56GhostOutline
-} from '@vkontakte/icons';
 
 class NotificationsPanel extends React.Component {
 

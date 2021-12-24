@@ -9,8 +9,7 @@ import {
   Group,
   Div,
   PanelHeaderBack,
-  VKCOM,
-	FixedLayout
+  VKCOM
 } from "@vkontakte/vkui";
 
 import {
@@ -39,12 +38,10 @@ class GiftsPanel extends React.Component {
 				>
 					Подарки
 				</PanelHeader>
-				<FixedLayout vertical="top">
-					<Div className="balansBlock">
-						<div>Ваш баланс: <span className="balansText">100</span> coin</div>
-					</Div>
-				</FixedLayout>
-				<Group style={{paddingTop: 45}}>
+				<Div className="balansBlock">
+					<div>Ваш баланс: <span className="balansText">100</span> coin</div>
+				</Div>
+				<Group>
 					<Div className="blockGifts">
 						<div className="blockGift">
 							<div className="blockImgGifts" onClick={() => setPage('home', 'gift')}>

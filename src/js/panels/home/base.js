@@ -15,14 +15,12 @@ import {
     IconButton,
     Div,
     Tappable,
-    Spacing,
     Link,
     Counter,
     ActionSheet,
     ActionSheetItem,
     CellButton,
-    VKCOM,
-    IOS
+    VKCOM
 } from '@vkontakte/vkui'
 
 import { RichTooltip } from '@vkontakte/vkui/dist/unstable';
@@ -110,7 +108,7 @@ openImg() {
 }
 
   render() {
-    const {id, setPage, withoutEpic, platform} = this.props;
+    const {id, setPage, platform} = this.props;
 
     return (
         <Panel id={id}>
@@ -118,7 +116,7 @@ openImg() {
 				{
 					(queryGet('vk_platform') === 'desktop_web') && (
             <PanelHeader
-              right={
+              /*right={
                 <PanelHeaderButton
                   aria-label="Уведомления. У вас N уведомлений"
                   label={<Counter size="s" mode="prominent">21</Counter>}
@@ -126,7 +124,7 @@ openImg() {
                 >
                   <Icon28Notifications />
                 </PanelHeaderButton>
-              }
+              }*/
               aria-label="Лента"
             >
               Лента
@@ -218,7 +216,7 @@ openImg() {
                         </div>
                       }
                     >
-                      <IconButton onClick={platform != VKCOM ? () => this.openInteractionAcquaintance2() : undefined}><Icon28MoreVertical /></IconButton>
+                      <IconButton onClick={platform !== VKCOM ? () => this.openInteractionAcquaintance2() : undefined}><Icon28MoreVertical /></IconButton>
                     </RichTooltip>
                   }
                   description="вчера в 19:35"
@@ -280,7 +278,7 @@ openImg() {
                         </div>
                       }
                     >
-                      <IconButton onClick={platform != VKCOM ? () => this.openInteractionAcquaintance() : undefined}><Icon28MoreVertical /></IconButton>
+                      <IconButton onClick={platform !== VKCOM ? () => this.openInteractionAcquaintance() : undefined}><Icon28MoreVertical /></IconButton>
                     </RichTooltip>
                   }
                   description="вчера в 15:12"
