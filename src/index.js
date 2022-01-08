@@ -37,7 +37,7 @@ export const store = createStore(rootReducer, composeWithDevTools(
     applyMiddleware(thunk),
 ));
 
-store.dispatch(setStory('home', 'base'));
+store.dispatch(setStory('chat', 'base'));
 
 ReactDOM.render(
     <Provider store={store}>

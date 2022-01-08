@@ -21,19 +21,27 @@ import {
   Placeholder,
   Button,
   Spacing,
-  IconButton
+  IconButton,
+  Separator,
+  Cell
 } from '@vkontakte/vkui/';
 
 import {
 	Icon12Verified,
 	Icon16Dropdown,
+	Icon24Filter,
+	Icon28MessageAddBadgeOutline,
+	Icon28MessageCheckOutline,
+	Icon28MessageHeartOutline,
 	Icon28MessageOutline,
+	Icon28MessageReplyOutline,
 	Icon28MessageUnreadTop,
   Icon28SearchOutline,
   Icon56MessagesOutline
 } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
+import { Dropdown } from '@vkontakte/vkui/dist/unstable';
 
 class ChatPanel extends React.Component {
   constructor(props) {
@@ -59,7 +67,7 @@ class ChatPanel extends React.Component {
 	}
 
     render() {
-        const {id, platform} = this.props;
+        const {id, platform, setPage} = this.props;
 
         return (
             <Panel id={id}>
@@ -73,12 +81,82 @@ class ChatPanel extends React.Component {
                 {this.state.activeTab === "message" ? this.state.mode === "unread" ?<div>
                   Непрочитанные
                 </div> :null :null}
+                {this.state.activeTab === "message" ? this.state.mode === "onlyOnline" ?<div>
+                  Только онлайн
+                </div> :null :null}
+                {this.state.activeTab === "message" ? this.state.mode === "favorites" ?<div>
+                  Избранные
+                </div> :null :null}
+                {this.state.activeTab === "message" ? this.state.mode === "waiting" ?<div>
+                  Ждут ответ
+                </div> :null :null}
+                {this.state.activeTab === "message" ? this.state.mode === "correspondenceRequests" ?<div>
+                  Запросы на переписку
+                </div> :null :null}
               </PanelHeader>
               
               {this.state.activeTab === "message" ? this.state.mode === "message" ?<div style={{display: "flex"}}>
                 <div className="listUsersMessage">
-                  <Search />
+                  <div style={{display: "flex"}}>
+                    <Search after />
+                    <div>
+                      <Dropdown
+                        placement="bottom-end"
+                        action="hover"
+                        content={
+                          <List>
+                            <CellButton 
+                              before={<Icon28MessageOutline />}
+                              multiline
+                              onClick={this.select} data-mode="message"
+                            >
+                              Все сообщения
+                            </CellButton>
+                            <CellButton 
+                              before={<Icon28MessageCheckOutline />}
+                              multiline
+                              onClick={this.select} data-mode="unread"
+                            >
+                              Непрочитанные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageUnreadTop />}
+                              multiline
+                              onClick={this.select} data-mode="onlyOnline"
+                            >
+                              Только онлайн
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageHeartOutline />}
+                              multiline
+                              onClick={this.select} data-mode="favorites"
+                            >
+                              Избранные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageReplyOutline />}
+                              multiline
+                              onClick={this.select} data-mode="waiting"
+                            >
+                              Ждут ответа
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageAddBadgeOutline />}
+                              multiline
+                              onClick={this.select} data-mode="correspondenceRequests"
+                            >
+                              Запросы на переписку
+                            </CellButton>
+                          </List>
+                        }
+                      >
+                        <IconButton style={{margin: "2px"}}><Icon24Filter style={{color: "var(--search_bar_field_tint)"}}/></IconButton>
+                      </Dropdown>
+                      <div className="separatorSearch" />
+                    </div>
+                  </div>
                   <SimpleCell
+                    onClick={() => setPage('chat', 'testChat')}
                     before={<Avatar badge="online-mobile" size={48} style={{objectFit: "cover"}} src="https://sun9-18.userapi.com/impg/iCu0lPqTMBqw1c2aV9Ra5OiYd9Ki3yamQVkTfw/5Mw6yCkWOnU.jpg?size=1201x1600&quality=96&sign=7dfe1cea7dfe8b88f5a617790320848c&type=album" />}
                     badge={<Icon12Verified />}
                     after={<Counter size="s" style={{marginLeft: 10}} mode="primary">4</Counter>}
@@ -123,8 +201,66 @@ class ChatPanel extends React.Component {
 
               {this.state.activeTab === "message" ? this.state.mode === "unread" ?<div  style={{display: "flex"}}>
                 <div className="listUsersMessage">
-                  <Search />
+                  <div style={{display: "flex"}}>
+                    <Search after />
+                    <div>
+                      <Dropdown
+                        placement="bottom-end"
+                        action="hover"
+                        content={
+                          <List>
+                            <CellButton 
+                              before={<Icon28MessageOutline />}
+                              multiline
+                              onClick={this.select} data-mode="message"
+                            >
+                              Все сообщения
+                            </CellButton>
+                            <CellButton 
+                              before={<Icon28MessageCheckOutline />}
+                              multiline
+                              onClick={this.select} data-mode="unread"
+                            >
+                              Непрочитанные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageUnreadTop />}
+                              multiline
+                              onClick={this.select} data-mode="onlyOnline"
+                            >
+                              Только онлайн
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageHeartOutline />}
+                              multiline
+                              onClick={this.select} data-mode="favorites"
+                            >
+                              Избранные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageReplyOutline />}
+                              multiline
+                              onClick={this.select} data-mode="waiting"
+                            >
+                              Ждут ответа
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageAddBadgeOutline />}
+                              multiline
+                              onClick={this.select} data-mode="correspondenceRequests"
+                            >
+                              Запросы на переписку
+                            </CellButton>
+                          </List>
+                        }
+                      >
+                        <IconButton style={{margin: "2px"}}><Icon24Filter style={{color: "var(--search_bar_field_tint)"}}/></IconButton>
+                      </Dropdown>
+                      <div className="separatorSearch" />
+                    </div>
+                  </div>
                   <SimpleCell
+                    onClick={() => setPage('chat', 'testChat')}
                     before={<Avatar badge="online-mobile" size={48} style={{objectFit: "cover"}} src="https://sun9-18.userapi.com/impg/iCu0lPqTMBqw1c2aV9Ra5OiYd9Ki3yamQVkTfw/5Mw6yCkWOnU.jpg?size=1201x1600&quality=96&sign=7dfe1cea7dfe8b88f5a617790320848c&type=album" />}
                     badge={<Icon12Verified />}
                     after={<Counter size="s" style={{marginLeft: 10}} mode="primary">4</Counter>}
@@ -153,12 +289,329 @@ class ChatPanel extends React.Component {
                   </Placeholder>
                 </div>
               </div> : null : null}
+
+              {this.state.activeTab === "message" ? this.state.mode === "onlyOnline" ?<div  style={{display: "flex"}}>
+                <div className="listUsersMessage">
+                  <div style={{display: "flex"}}>
+                    <Search after />
+                    <div>
+                      <Dropdown
+                        placement="bottom-end"
+                        action="hover"
+                        content={
+                          <List>
+                            <CellButton 
+                              before={<Icon28MessageOutline />}
+                              multiline
+                              onClick={this.select} data-mode="message"
+                            >
+                              Все сообщения
+                            </CellButton>
+                            <CellButton 
+                              before={<Icon28MessageCheckOutline />}
+                              multiline
+                              onClick={this.select} data-mode="unread"
+                            >
+                              Непрочитанные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageUnreadTop />}
+                              multiline
+                              onClick={this.select} data-mode="onlyOnline"
+                            >
+                              Только онлайн
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageHeartOutline />}
+                              multiline
+                              onClick={this.select} data-mode="favorites"
+                            >
+                              Избранные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageReplyOutline />}
+                              multiline
+                              onClick={this.select} data-mode="waiting"
+                            >
+                              Ждут ответа
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageAddBadgeOutline />}
+                              multiline
+                              onClick={this.select} data-mode="correspondenceRequests"
+                            >
+                              Запросы на переписку
+                            </CellButton>
+                          </List>
+                        }
+                      >
+                        <IconButton style={{margin: "2px"}}><Icon24Filter style={{color: "var(--search_bar_field_tint)"}}/></IconButton>
+                      </Dropdown>
+                      <div className="separatorSearch" />
+                    </div>
+                  </div>
+                  <Placeholder
+                    icon={<Icon28MessageUnreadTop width={56} height={56} />}
+                    header="У Вас нет таких чатов"
+                    action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                  >
+                    У Вас нет чатов, с людьми в сети. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                  </Placeholder>
+                </div>
+                <div className="blockUsersMessage">
+                  <Placeholder
+                    icon={<Icon56MessagesOutline />}
+                    header="Выберите чат"
+                    action={<Button mode="outline" size="m">Найти пользователя</Button>}
+                  >
+                    Находите пользователей для общения и будьте первыми, кто начнет разговор
+                  </Placeholder>
+                </div>
+              </div> : null : null}
+
+              {this.state.activeTab === "message" ? this.state.mode === "favorites" ?<div  style={{display: "flex"}}>
+                <div className="listUsersMessage">
+                  <div style={{display: "flex"}}>
+                    <Search after />
+                    <div>
+                      <Dropdown
+                        placement="bottom-end"
+                        action="hover"
+                        content={
+                          <List>
+                            <CellButton 
+                              before={<Icon28MessageOutline />}
+                              multiline
+                              onClick={this.select} data-mode="message"
+                            >
+                              Все сообщения
+                            </CellButton>
+                            <CellButton 
+                              before={<Icon28MessageCheckOutline />}
+                              multiline
+                              onClick={this.select} data-mode="unread"
+                            >
+                              Непрочитанные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageUnreadTop />}
+                              multiline
+                              onClick={this.select} data-mode="onlyOnline"
+                            >
+                              Только онлайн
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageHeartOutline />}
+                              multiline
+                              onClick={this.select} data-mode="favorites"
+                            >
+                              Избранные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageReplyOutline />}
+                              multiline
+                              onClick={this.select} data-mode="waiting"
+                            >
+                              Ждут ответа
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageAddBadgeOutline />}
+                              multiline
+                              onClick={this.select} data-mode="correspondenceRequests"
+                            >
+                              Запросы на переписку
+                            </CellButton>
+                          </List>
+                        }
+                      >
+                        <IconButton style={{margin: "2px"}}><Icon24Filter style={{color: "var(--search_bar_field_tint)"}}/></IconButton>
+                      </Dropdown>
+                      <div className="separatorSearch" />
+                    </div>
+                  </div>
+                  <Placeholder
+                    icon={<Icon28MessageHeartOutline width={56} height={56} />}
+                    header="У Вас нет таких чатов"
+                    action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                  >
+                    У Вас нет избранных чатов. Чтобы добавить их, нажимайте на иконку сердечка в открытом чате. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                  </Placeholder>
+                </div>
+                <div className="blockUsersMessage">
+                  <Placeholder
+                    icon={<Icon56MessagesOutline />}
+                    header="Выберите чат"
+                    action={<Button mode="outline" size="m">Найти пользователя</Button>}
+                  >
+                    Находите пользователей для общения и будьте первыми, кто начнет разговор
+                  </Placeholder>
+                </div>
+              </div> : null : null}
+
+              {this.state.activeTab === "message" ? this.state.mode === "waiting" ?<div  style={{display: "flex"}}>
+                <div className="listUsersMessage">
+                  <div style={{display: "flex"}}>
+                    <Search after />
+                    <div>
+                      <Dropdown
+                        placement="bottom-end"
+                        action="hover"
+                        content={
+                          <List>
+                            <CellButton 
+                              before={<Icon28MessageOutline />}
+                              multiline
+                              onClick={this.select} data-mode="message"
+                            >
+                              Все сообщения
+                            </CellButton>
+                            <CellButton 
+                              before={<Icon28MessageCheckOutline />}
+                              multiline
+                              onClick={this.select} data-mode="unread"
+                            >
+                              Непрочитанные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageUnreadTop />}
+                              multiline
+                              onClick={this.select} data-mode="onlyOnline"
+                            >
+                              Только онлайн
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageHeartOutline />}
+                              multiline
+                              onClick={this.select} data-mode="favorites"
+                            >
+                              Избранные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageReplyOutline />}
+                              multiline
+                              onClick={this.select} data-mode="waiting"
+                            >
+                              Ждут ответа
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageAddBadgeOutline />}
+                              multiline
+                              onClick={this.select} data-mode="correspondenceRequests"
+                            >
+                              Запросы на переписку
+                            </CellButton>
+                          </List>
+                        }
+                      >
+                        <IconButton style={{margin: "2px"}}><Icon24Filter style={{color: "var(--search_bar_field_tint)"}}/></IconButton>
+                      </Dropdown>
+                      <div className="separatorSearch" />
+                    </div>
+                  </div>
+                  <Placeholder
+                    icon={<Icon28MessageReplyOutline width={56} height={56} />}
+                    header="У Вас нет таких чатов"
+                    action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                  >
+                    У Вас нет чатов с людьми, которые ждут от Вас ответа. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                  </Placeholder>
+                </div>
+                <div className="blockUsersMessage">
+                  <Placeholder
+                    icon={<Icon56MessagesOutline />}
+                    header="Выберите чат"
+                    action={<Button mode="outline" size="m">Найти пользователя</Button>}
+                  >
+                    Находите пользователей для общения и будьте первыми, кто начнет разговор
+                  </Placeholder>
+                </div>
+              </div> : null : null}
+
+              {this.state.activeTab === "message" ? this.state.mode === "correspondenceRequests" ?<div  style={{display: "flex"}}>
+                <div className="listUsersMessage">
+                  <div style={{display: "flex"}}>
+                    <Search after />
+                    <div>
+                      <Dropdown
+                        placement="bottom-end"
+                        action="hover"
+                        content={
+                          <List>
+                            <CellButton 
+                              before={<Icon28MessageOutline />}
+                              multiline
+                              onClick={this.select} data-mode="message"
+                            >
+                              Все сообщения
+                            </CellButton>
+                            <CellButton 
+                              before={<Icon28MessageCheckOutline />}
+                              multiline
+                              onClick={this.select} data-mode="unread"
+                            >
+                              Непрочитанные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageUnreadTop />}
+                              multiline
+                              onClick={this.select} data-mode="onlyOnline"
+                            >
+                              Только онлайн
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageHeartOutline />}
+                              multiline
+                              onClick={this.select} data-mode="favorites"
+                            >
+                              Избранные
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageReplyOutline />}
+                              multiline
+                              onClick={this.select} data-mode="waiting"
+                            >
+                              Ждут ответа
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28MessageAddBadgeOutline />}
+                              multiline
+                              onClick={this.select} data-mode="correspondenceRequests"
+                            >
+                              Запросы на переписку
+                            </CellButton>
+                          </List>
+                        }
+                      >
+                        <IconButton style={{margin: "2px"}}><Icon24Filter style={{color: "var(--search_bar_field_tint)"}}/></IconButton>
+                      </Dropdown>
+                      <div className="separatorSearch" />
+                    </div>
+                  </div>
+                  <Placeholder
+                    icon={<Icon28MessageAddBadgeOutline width={56} height={56} />}
+                    header="У Вас нет таких чатов"
+                    action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                  >
+                    У Вас нет чатов с запросами на переписку. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                  </Placeholder>
+                </div>
+                <div className="blockUsersMessage">
+                  <Placeholder
+                    icon={<Icon56MessagesOutline />}
+                    header="Выберите чат"
+                    action={<Button mode="outline" size="m">Найти пользователя</Button>}
+                  >
+                    Находите пользователей для общения и будьте первыми, кто начнет разговор
+                  </Placeholder>
+                </div>
+              </div> : null : null}
               </div>)
             }
             {/*Для всех остальных устройств */}
             {
               (queryGet('vk_platform') === 'mobile_android'
               || queryGet('vk_platform') === 'mobile_iphone'
+              || queryGet('vk_platform') === 'mobile_ipad'
               || queryGet('vk_platform') === 'mobile_android_messenger'
               || queryGet('vk_platform') === 'mobile_iphone_messenger'
               || queryGet('vk_platform') === 'mobile_web') && (<div>
@@ -180,6 +633,42 @@ class ChatPanel extends React.Component {
                   Непрочитанные
                 </PanelHeaderContent>
                 </div> :null :null}
+
+                {this.state.activeTab === "message" ? this.state.mode === "onlyOnline" ?<div>
+                <PanelHeaderContent
+                  aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
+                  onClick={this.toggleContext}
+                >
+                  Только онлайн
+                </PanelHeaderContent>
+                </div> :null :null}
+
+                {this.state.activeTab === "message" ? this.state.mode === "favorites" ?<div>
+                <PanelHeaderContent
+                  aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
+                  onClick={this.toggleContext}
+                >
+                  Избранные
+                </PanelHeaderContent>
+                </div> :null :null}
+
+                {this.state.activeTab === "message" ? this.state.mode === "waiting" ?<div>
+                <PanelHeaderContent
+                  aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
+                  onClick={this.toggleContext}
+                >
+                  Ждут ответа
+                </PanelHeaderContent>
+                </div> :null :null}
+
+                {this.state.activeTab === "message" ? this.state.mode === "correspondenceRequests" ?<div>
+                <PanelHeaderContent
+                  aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
+                  onClick={this.toggleContext}
+                >
+                  Запросы на переписку
+                </PanelHeaderContent>
+                </div> :null :null}
               </PanelHeader>
               <PanelHeaderContext opened={this.state.contextOpened} onClose={this.toggleContext}>
               <List>
@@ -194,10 +683,42 @@ class ChatPanel extends React.Component {
                 <CellButton
                   onClick={this.select}
                   data-mode="unread"
-                  before={<Icon28MessageUnreadTop />}
+                  before={<Icon28MessageCheckOutline />}
                   multiline
                 >
                   Непрочитанные
+                </CellButton>
+                <CellButton
+                  before={<Icon28MessageUnreadTop />}
+                  multiline
+                  onClick={this.select}
+                  data-mode="onlyOnline"
+                >
+                  Только онлайн
+                </CellButton>
+                <CellButton
+                  before={<Icon28MessageHeartOutline />}
+                  multiline
+                  onClick={this.select}
+                  data-mode="favorites"
+                >
+                  Избранные
+                </CellButton>
+                <CellButton
+                  before={<Icon28MessageReplyOutline />}
+                  multiline
+                  onClick={this.select}
+                  data-mode="waiting"
+                >
+                  Ждут ответа
+                </CellButton>
+                <CellButton
+                  before={<Icon28MessageAddBadgeOutline />}
+                  multiline
+                  onClick={this.select}
+                  data-mode="correspondenceRequests"
+                >
+                  Запросы на переписку
                 </CellButton>
               </List>
               </PanelHeaderContext>
@@ -205,6 +726,7 @@ class ChatPanel extends React.Component {
               {this.state.activeTab === "message" ? this.state.mode === "message" ?<div>
                 <div>
                   <SimpleCell
+                    onClick={() => setPage('chat', 'testChat')}
                     before={<Avatar badge="online-mobile" size={48} style={{objectFit: "cover"}} src="https://sun9-18.userapi.com/impg/iCu0lPqTMBqw1c2aV9Ra5OiYd9Ki3yamQVkTfw/5Mw6yCkWOnU.jpg?size=1201x1600&quality=96&sign=7dfe1cea7dfe8b88f5a617790320848c&type=album" />}
                     badge={<Icon12Verified />}
                     after={<Counter size="m" style={{marginLeft: 10}} mode="primary">4</Counter>}
@@ -238,6 +760,7 @@ class ChatPanel extends React.Component {
               {this.state.activeTab === "message" ? this.state.mode === "unread" ?<div>
                 <div>
                   <SimpleCell
+                    onClick={() => setPage('chat', 'testChat')}
                     before={<Avatar badge="online-mobile" size={48} style={{objectFit: "cover"}} src="https://sun9-18.userapi.com/impg/iCu0lPqTMBqw1c2aV9Ra5OiYd9Ki3yamQVkTfw/5Mw6yCkWOnU.jpg?size=1201x1600&quality=96&sign=7dfe1cea7dfe8b88f5a617790320848c&type=album" />}
                     badge={<Icon12Verified />}
                     after={<Counter size="m" style={{marginLeft: 10}} mode="primary">4</Counter>}
@@ -253,6 +776,49 @@ class ChatPanel extends React.Component {
                     Артём Петрунин
                   </SimpleCell>
                 </div>
+              </div> : null : null}
+              {this.state.activeTab === "message" ? this.state.mode === "onlyOnline" ?<div>
+                <Placeholder
+                  stretched
+                  icon={<Icon28MessageUnreadTop width={56} height={56} />}
+                  header="У Вас нет таких чатов"
+                  action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                >
+                  У Вас нет чатов, с людьми в сети. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                </Placeholder>
+              </div> : null : null}
+
+              {this.state.activeTab === "message" ? this.state.mode === "favorites" ?<div>
+                <Placeholder
+                  stretched
+                  icon={<Icon28MessageHeartOutline width={56} height={56} />}
+                  header="У Вас нет таких чатов"
+                  action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                >
+                  У Вас нет избранных чатов. Чтобы добавить их, нажимайте на иконку сердечка в открытом чате. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                </Placeholder>
+              </div> : null : null}
+
+              {this.state.activeTab === "message" ? this.state.mode === "waiting" ?<div>
+                <Placeholder
+                  stretched
+                  icon={<Icon28MessageReplyOutline width={56} height={56} />}
+                  header="У Вас нет таких чатов"
+                  action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                >
+                  У Вас нет чатов с людьми, которые ждут от Вас ответа. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                </Placeholder>
+              </div> : null : null}
+
+              {this.state.activeTab === "message" ? this.state.mode === "correspondenceRequests" ?<div>
+                <Placeholder
+                  stretched
+                  icon={<Icon28MessageAddBadgeOutline width={56} height={56} />}
+                  header="У Вас нет таких чатов"
+                  action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
+                >
+                  У Вас нет чатов с запросами на переписку. Вы можете перейти ко всем сообщениям и там кому-нибудь написать
+                </Placeholder>
               </div> : null : null}
               </div>)
             }

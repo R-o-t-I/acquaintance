@@ -33,6 +33,7 @@ import queryGet from '../../../functions/query_get.jsx';
 import bridge from '@vkontakte/vk-bridge';
 
 import {
+	Icon20Info,
 	Icon24Filter,
 	Icon28AllCategoriesOutline,
 	Icon28CancelOutline,
@@ -64,6 +65,7 @@ class PeoplePanel extends React.Component {
 
     render() {
         const {id, setPage, platform} = this.props;
+				const { isDesktop } = this.state
 
         return (
             <Panel id={id}>
@@ -74,11 +76,10 @@ class PeoplePanel extends React.Component {
 							>
 								Люди
 							</PanelHeader>
+							<Group>
 							<Search 
 								icon={<Icon24Filter onClick={() => setPage('people', 'filter')} />}
-								style={{backgroundColor: "var(--background_content)", marginLeft: "1px", marginRight: "1px"}}
 							/>
-							<Group>
 							<Header mode="primary" aside={<Link>Хочу сюда</Link>}>Топ пользователи</Header>
 							<HorizontalScroll>
 								<div style={{display: 'flex'}}>
@@ -215,6 +216,7 @@ class PeoplePanel extends React.Component {
 						{
 							(queryGet('vk_platform') === 'mobile_android'
 							|| queryGet('vk_platform') === 'mobile_iphone'
+							|| queryGet('vk_platform') === 'mobile_ipad'
 							|| queryGet('vk_platform') === 'mobile_android_messenger'
 							|| queryGet('vk_platform') === 'mobile_iphone_messenger'
 							|| queryGet('vk_platform') === 'mobile_web') && (
@@ -356,7 +358,7 @@ class PeoplePanel extends React.Component {
 						{/*Для ПК */}
 						{
 							(queryGet('vk_platform') === 'desktop_web') && (
-						<div>
+						/*<div>
 							<SplitLayout>
 								<SplitCol width={'100px'}>
 									<div className="block-card-people">
@@ -478,10 +480,137 @@ class PeoplePanel extends React.Component {
 								</Group>
 								</SplitCol>
 							</SplitLayout>
+						</div> */
+						<div style={{display: "flex"}}>
+							<div className="blockImgCardPeople">
+								<div className="popoutBlockCardPeople">
+									<div className="blockCardPopoutBlockCardPeople">
+										<div style={{position: "relative"}}>
+											<div className="leftCardPopoutBlockCardPeople" />
+											<div className="swipeLeftCardPopoutBlockCardPeople" />
+											<div className="krugSwipeLeftCardPopoutBlockCardPeople" />
+										</div>
+										<div style={{position: "relative"}}>
+											<div className="rightCardPopoutBlockCardPeople" />
+											<div className="swipeRightCardPopoutBlockCardPeople" />
+											<div className="krugSwipeRightCardPopoutBlockCardPeople" />
+										</div>
+									</div>
+									<div className="textCardPopoutBlockCardPeople">Свайпай профили пользователей, чтобы начать общаться</div>
+								</div>
+								<img className="imgCardPeople" src="https://sun9-38.userapi.com/impf/c854224/v854224036/a1aef/klD5bu0WkuU.jpg?size=2560x1440&quality=96&sign=dfd0778c6f06f69789b43bb41d57af2d&type=album" />
+								<div onClick={() => setPage('people', 'filter')} className="buttonFilterCardPeople"><Icon28SlidersOutline style={{margin: "auto", marginTop: 10, color: "#FFFFFF"}} /></div>
 							</div>
+							<div className="blockInfoCardPeople">
+								<Group>
+										<div style={{textAlign: "center", marginTop: "16px"}}><b>Александр Тихонович</b></div>
+										<div style={{textAlign: "center", color: "var(--text_secondary)"}}>80 м · 22 года</div>
+									<div style={{display: "flex", marginTop: 12, marginBottom: 12}}>
+										<Button
+											stretched size="m"
+											style={{marginLeft: 12}}
+											before={<Icon24UserAddOutline />}
+										>
+											Подписаться
+										</Button>
+										<Button
+											mode="secondary"
+											stretched size="m"
+											style={{marginLeft: 5, marginRight: 5}}
+											before={<Icon24MessageOutline />}
+										/>
+										<Button
+											mode="secondary"
+											stretched size="m"
+											style={{marginRight: 12}}
+											before={<Icon24GiftOutline />}
+										/>
+									</div>
+									<Spacing separator="center" />
+									<div style={{display: "flex", justifyContent: "space-around", marginTop: 10}}>
+										<Tappable style={{textAlign: "center", width: "calc(100%/3)", padding: 10}}>
+											<div style={{fontWeight: "500"}}>7502</div>
+											<div style={{fontSize: "14px", color: "var(--text_secondary)"}}>подписчики</div>
+										</Tappable>
+										<Tappable style={{textAlign: "center", width: "calc(100%/3)", padding: 10}}>
+											<div style={{fontWeight: "500"}}>249</div>
+											<div style={{fontSize: "14px", color: "var(--text_secondary)"}}>подписки</div>
+										</Tappable>
+										<Tappable style={{textAlign: "center", width: "calc(100%/3)", padding: 10}}>
+											<div style={{fontWeight: "500"}}>127</div>
+											<div style={{fontSize: "14px", color: "var(--text_secondary)"}}>подарки</div>
+										</Tappable>
+									</div>
+								</Group>
+								<Group>
+									<MiniInfoCell
+										before={<Icon20ArticleOutline />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										ВКонтакте начинался как сайт для выпускников вузов, а сейчас это огромная экосистема с безграничными возможностями и миллионами пользователей.
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon20Search />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										Отношениея · Дружба · Свидания · Общение в сети
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon20PlaceOutline />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										Минск
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon20UserOutline />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										Белый · 175см · 55 кг
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon20LikeOutline />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										В отношениях
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon20VirusOutline />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										Отрицательный · 30 октября 2021г.
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon20UsersOutline />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										Гей · Уни
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon28HashtagOutline width={20} height={20} />}
+										textWrap="short"
+										textLevel="primary"
+									>
+										<Link style={{textAlign: "left"}}>#kiss #fetish #dogplay #gaymer</Link>
+									</MiniInfoCell>
+									<MiniInfoCell
+										before={<Icon20Info />}
+										mode="more"
+									>
+										Подробная информация
+									</MiniInfoCell>
+								</Group>
+							</div>
+						</div>
 							)
 						}
-							</div> :null}
+					</div> :null}
             </Panel>
         );
     }

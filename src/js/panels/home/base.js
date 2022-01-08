@@ -76,7 +76,7 @@ class HomePanel extends React.Component {
           </ActionSheetItem>
         </ActionSheet>
       );
-  }
+    }
 
   openInteractionAcquaintance2() {
     this.props.openPopout(
@@ -135,6 +135,7 @@ openImg() {
 				{
 					(queryGet('vk_platform') === 'mobile_android'
 					|| queryGet('vk_platform') === 'mobile_iphone'
+          || queryGet('vk_platform') === 'mobile_ipad'
 					|| queryGet('vk_platform') === 'mobile_android_messenger'
 					|| queryGet('vk_platform') === 'mobile_iphone_messenger'
 					|| queryGet('vk_platform') === 'mobile_web') && (

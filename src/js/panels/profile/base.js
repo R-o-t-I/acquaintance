@@ -65,7 +65,8 @@ import {
 	Icon28MoreVertical,
 	Icon28EditOutline,
 	Icon12ChevronOutline,
-	Icon16Done
+	Icon16Done,
+	Icon56CameraOutline
 } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
@@ -171,6 +172,7 @@ class ProfilePanel extends React.Component {
 				{
 					(queryGet('vk_platform') === 'mobile_android'
 					|| queryGet('vk_platform') === 'mobile_iphone'
+					|| queryGet('vk_platform') === 'mobile_ipad'
 					|| queryGet('vk_platform') === 'mobile_android_messenger'
 					|| queryGet('vk_platform') === 'mobile_iphone_messenger'
 					|| queryGet('vk_platform') === 'mobile_web') && (
@@ -244,7 +246,13 @@ class ProfilePanel extends React.Component {
 									bullets="light"
 									showArrows
 								>
-									<img src={photo} />
+									<div className="blockUserPhotoProfile">
+										<Div>
+											<Icon56CameraOutline width={96} height={96} className="iconUserPhotoProfile" />
+											<div>Изображение отсутствует</div>
+											<div style={{marginTop: "12px"}}><Button mode="outline">Загрузить</Button></div>
+										</Div>
+									</div>
 									<div style={{ backgroundColor: 'var(--button_commerce_background)' }} />
 									<div style={{ backgroundColor: 'var(--accent)' }} />
 									{/*У другого профиля*/}
@@ -392,6 +400,7 @@ class ProfilePanel extends React.Component {
 				{
 					(queryGet('vk_platform') === 'mobile_android'
 					|| queryGet('vk_platform') === 'mobile_iphone'
+					|| queryGet('vk_platform') === 'mobile_ipad'
 					|| queryGet('vk_platform') === 'mobile_android_messenger'
 					|| queryGet('vk_platform') === 'mobile_iphone_messenger'
 					|| queryGet('vk_platform') === 'mobile_web') && (
