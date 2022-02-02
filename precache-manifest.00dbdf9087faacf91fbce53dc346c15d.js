@@ -1,31 +1,31 @@
 self.__precacheManifest = [
   {
-    "revision": "a0dfe01a15e411e9b20f",
-    "url": "/acquaintance/static/css/main.db73e0b7.chunk.css"
+    "revision": "426f115abb900d6298af",
+    "url": "/acquaintance/static/css/main.1abdf4bd.chunk.css"
   },
   {
-    "revision": "a0dfe01a15e411e9b20f",
-    "url": "/acquaintance/static/js/main.8f23fa07.chunk.js"
+    "revision": "426f115abb900d6298af",
+    "url": "/acquaintance/static/js/main.8e79e88f.chunk.js"
   },
   {
-    "revision": "7151fd705d27503363a6",
-    "url": "/acquaintance/static/js/runtime~main.aa674058.js"
+    "revision": "95ebcad7bbdad0c52790",
+    "url": "/acquaintance/static/js/runtime~main.680bb86e.js"
   },
   {
-    "revision": "d8cdf0f7840da69f56e8",
+    "revision": "33f94826879ff24c5a33",
     "url": "/acquaintance/static/css/2.91b77112.chunk.css"
   },
   {
-    "revision": "d8cdf0f7840da69f56e8",
-    "url": "/acquaintance/static/js/2.d12bc176.chunk.js"
+    "revision": "33f94826879ff24c5a33",
+    "url": "/acquaintance/static/js/2.760b93c5.chunk.js"
   },
   {
-    "revision": "1b05104d8c9bde9145dd",
-    "url": "/acquaintance/static/js/3.25e32b37.chunk.js"
+    "revision": "9b131f202f6f9382300a",
+    "url": "/acquaintance/static/js/3.41762641.chunk.js"
   },
   {
-    "revision": "0850e790bfc5c143c457",
-    "url": "/acquaintance/static/js/4.ebe411c0.chunk.js"
+    "revision": "f867744d6ab83673f144",
+    "url": "/acquaintance/static/js/4.2d522d4f.chunk.js"
   },
   {
     "revision": "70dfdffd1b9fdf7d80bba58ebc591bc4",
@@ -48,7 +48,7 @@ self.__precacheManifest = [
     "url": "/acquaintance/static/media/logo.c98b7b20.svg"
   },
   {
-    "revision": "938d840e29e22d63b44ab6c50972307f",
+    "revision": "963ed963e21c68040318999391360aca",
     "url": "/acquaintance/index.html"
   }
 ];
