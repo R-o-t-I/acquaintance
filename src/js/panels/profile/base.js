@@ -66,7 +66,8 @@ import {
 	Icon28EditOutline,
 	Icon12ChevronOutline,
 	Icon16Done,
-	Icon56CameraOutline
+	Icon56CameraOutline,
+	Icon48SwipeUp
 } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
@@ -334,7 +335,7 @@ class ProfilePanel extends React.Component {
 										textLevel="primary"
 										style={{marginLeft: "-15px", marginRight: "-15px"}}
 									>
-										Отношениея · Дружба · Свидания · Общение в сети
+										Отношениея · Дружба · Свидания · Общение в сети · Секс
 									</MiniInfoCell>
 									<MiniInfoCell
 										before={<Icon20PlaceOutline />}
@@ -424,6 +425,7 @@ class ProfilePanel extends React.Component {
 										Запрсите у @Alexander доступ к фото, чтобы посмотреть его
 									</Placeholder>*/}
 								</Gallery>
+								<div className="buttonSwipeDownCardPeople"><Icon48SwipeUp width={70} height={48}/></div>
 								<div className="block-profile-img"></div>
 							</div>
 							<SimpleCell
@@ -511,7 +513,7 @@ class ProfilePanel extends React.Component {
 									textWrap="short"
 									textLevel="primary"
 								>
-									Отношениея · Дружба · Свидания · Общение в сети
+									Отношениея · Дружба · Свидания · Общение в сети · Секс
 								</MiniInfoCell>
 								<MiniInfoCell
 									before={<Icon20PlaceOutline />}

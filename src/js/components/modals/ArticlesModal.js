@@ -146,7 +146,6 @@ class Articles extends React.Component {
             У Вас пока нет статей, доступных по ссылке
           </Placeholder>
         </div> : null}
-        <Div style={{marginBottom: 20}}></Div>
         {this.state.openSnackbar && <Div className='div-center'>
           {this.openSnackbar}
           Тут типа снекбар

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {setPage, openPopout, closePopout} from "../../store/router/actions";
+import {setPage, openPopout, closePopout, goBack} from "../../store/router/actions";
 
 import queryGet from '../../../functions/query_get.jsx';
 
@@ -32,13 +32,14 @@ import {
 	Icon24Filter,
 	Icon28MessageAddBadgeOutline,
 	Icon28MessageCheckOutline,
-	Icon28MessageHeartOutline,
 	Icon28MessageOutline,
 	Icon28MessageReplyOutline,
 	Icon28MessageUnreadTop,
   Icon28SearchOutline,
   Icon56MessagesOutline
 } from '@vkontakte/icons';
+
+import Icon28MessageFavoriteOutline from '../../../img/icon28MessageFavoriteOutline.svg'
 
 import bridge from '@vkontakte/vk-bridge';
 import { Dropdown } from '@vkontakte/vkui/dist/unstable';
@@ -67,7 +68,7 @@ class ChatPanel extends React.Component {
 	}
 
     render() {
-        const {id, platform, setPage} = this.props;
+        const {id, platform, setPage, goBack} = this.props;
 
         return (
             <Panel id={id}>
@@ -127,7 +128,7 @@ class ChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -231,7 +232,7 @@ class ChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -322,7 +323,7 @@ class ChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -401,7 +402,7 @@ class ChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -430,7 +431,7 @@ class ChatPanel extends React.Component {
                     </div>
                   </div>
                   <Placeholder
-                    icon={<Icon28MessageHeartOutline width={56} height={56} />}
+                    icon={<img src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" width={56} height={56} />}
                     header="У Вас нет таких чатов"
                     action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
                   >
@@ -480,7 +481,7 @@ class ChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -559,7 +560,7 @@ class ChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -615,7 +616,7 @@ class ChatPanel extends React.Component {
               || queryGet('vk_platform') === 'mobile_android_messenger'
               || queryGet('vk_platform') === 'mobile_iphone_messenger'
               || queryGet('vk_platform') === 'mobile_web') && (<div>
-              <PanelHeader left={<IconButton><Icon28SearchOutline /></IconButton>} separator={true}>
+              <PanelHeader left={<IconButton onClick={() => goBack()}><Icon28SearchOutline /></IconButton>} separator={true}>
                 {this.state.activeTab === "message" ? this.state.mode === "message" ?<div>
                 <PanelHeaderContent
                   aside={<Icon16Dropdown style={{ transform: `rotate(${this.state.contextOpened ? '180deg' : '0'})` }} />}
@@ -697,7 +698,7 @@ class ChatPanel extends React.Component {
                   Только онлайн
                 </CellButton>
                 <CellButton
-                  before={<Icon28MessageHeartOutline />}
+                  before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                   multiline
                   onClick={this.select}
                   data-mode="favorites"
@@ -791,7 +792,7 @@ class ChatPanel extends React.Component {
               {this.state.activeTab === "message" ? this.state.mode === "favorites" ?<div>
                 <Placeholder
                   stretched
-                  icon={<Icon28MessageHeartOutline width={56} height={56} />}
+                  icon={<img src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" width={56} height={56} />}
                   header="У Вас нет таких чатов"
                   action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
                 >
@@ -831,7 +832,8 @@ class ChatPanel extends React.Component {
 const mapDispatchToProps = {
   setPage,
   openPopout,
-  closePopout
+  closePopout,
+  goBack
 };
 
 export default connect(null, mapDispatchToProps)(ChatPanel);

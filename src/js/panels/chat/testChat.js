@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {setPage, openPopout, closePopout, goBack} from "../../store/router/actions";
+import {setPage, openPopout, closePopout, goBack, openModal, closeModal} from "../../store/router/actions";
 
 import queryGet from '../../../functions/query_get.jsx';
 
@@ -16,7 +16,7 @@ import {
 	CellButton,
 	List,
 	Search,
-  Group,
+  Snackbar,
   VKCOM,
   Placeholder,
   Button,
@@ -30,7 +30,9 @@ import {
   WriteBarIcon,
   ActionSheet,
   ActionSheetItem,
-  Alert
+  Alert,
+  HorizontalCell,
+  HorizontalScroll
 } from '@vkontakte/vkui/';
 
 import { Dropdown } from '@vkontakte/vkui/dist/unstable';
@@ -46,7 +48,6 @@ import {
   Icon24Filter,
 	Icon28MessageAddBadgeOutline,
 	Icon28MessageCheckOutline,
-	Icon28MessageHeartOutline,
 	Icon28MessageOutline,
 	Icon28MessageReplyOutline,
 	Icon28MessageUnreadTop,
@@ -64,8 +65,18 @@ import {
   Icon28SearchOutline,
   Icon28SmileOutline,
   Icon28VoiceOutline,
-  Icon28LikeOutline
+  Icon28FavoriteOutline,
+  Icon28CameraOutline,
+  Icon28VideoOutline,
+  Icon28LocationMapOutline,
+  Icon28GiftOutline,
+  Icon28LikeCircleFillRed,
+  Icon28LikeFillRed,
+  Icon24ThumbUp,
+  Icon24ThumbDown
 } from '@vkontakte/icons';
+
+import Icon28MessageFavoriteOutline from '../../../img/icon28MessageFavoriteOutline.svg'
 
 import bridge from '@vkontakte/vk-bridge';
 
@@ -76,15 +87,23 @@ class TestChatPanel extends React.Component {
     this.state = {
       activeTab: 'message',
 			contextOpened: false,
-			mode: 'message'
+      contextOpened2: false,
+			mode: 'message',
+      snackbar: null
     };
     this.toggleContext = this.toggleContext.bind(this);
+    this.toggleContext2 = this.toggleContext2.bind(this);
 		this.select = this.select.bind(this);
     this.openInteractionMessage = this.openInteractionMessage.bind(this);
+    this.favoritesChatSnackbar = this.favoritesChatSnackbar.bind(this);
   }
 
   toggleContext () {
 		this.setState({ contextOpened: !this.state.contextOpened });
+	}
+
+  toggleContext2 () {
+		this.setState({ contextOpened2: !this.state.contextOpened2 });
 	}
 	
 	select (e) {
@@ -149,8 +168,20 @@ class TestChatPanel extends React.Component {
     );
   }
 
+  favoritesChatSnackbar () {
+		if (this.state.snackbar) return;
+		this.setState({ snackbar:
+			<Snackbar
+				onClose={() => this.setState({ snackbar: null })}
+				before={<Avatar size={24} style={{ background: 'var(--accent)' }}><img src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" fill="#fff" width={14} height={14} /></Avatar>}
+			>
+				Чат добавлен в избранные
+			</Snackbar>
+		});
+	}
+
     render() {
-        const {id, platform, setPage, goBack} = this.props;
+        const {id, platform, setPage, goBack, openModal, closeModal} = this.props;
 
         return (
             <Panel id={id}>
@@ -210,7 +241,7 @@ class TestChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -281,7 +312,30 @@ class TestChatPanel extends React.Component {
                       Артём Петрунин
                     </SimpleCell>
                     <div style={{display: "flex", marginLeft: "auto"}}>
-                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LikeOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                      <IconButton onClick={this.favoritesChatSnackbar} style={{marginTop: "auto", marginBottom: "auto"}}><Icon28FavoriteOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                    <Dropdown
+                      action="hover"
+                      placement="bottom-end"
+                      content={
+                        <List>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                          >
+                            Запросить доступ к скрытым фото
+                          </CellButton>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                            onClick={() => this.openLockPhoto()}
+                          >
+                            Предоставить доступ к скрытым фото
+                          </CellButton>
+                        </List>
+                      }
+                    >
+                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LockOutline style={{color: "var(--icon_secondary)"}} /></IconButton>
+                    </Dropdown>
                     <Dropdown
                       action="hover"
                       placement="bottom-end"
@@ -304,19 +358,6 @@ class TestChatPanel extends React.Component {
                             multiline
                           >
                             Вложения диалога
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                          >
-                            Запросить доступ к скрытым фото
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                            onClick={() => this.openLockPhoto()}
-                          >
-                            Предоставить доступ к скрытым фото
                           </CellButton>
                           <Spacing separator="center"/>
                           <CellButton
@@ -348,9 +389,11 @@ class TestChatPanel extends React.Component {
                   </div>
                   <Separator wide />
                   <div className="chat">
+                    <div className="scrollbarChat" />
                     <div className="mine messages">
                       <div className="message last">
                         Привет! Как ты?
+                        <div className="reactionMineMessage"><Icon28LikeFillRed width={16} height={16} /></div>
                       </div>
                       <div style={{display: "flex"}}>
                         <div className="messageDataRight">
@@ -364,6 +407,7 @@ class TestChatPanel extends React.Component {
                     <div className="yours messages">
                       <div className="message">
                         Привет, нормально!
+                        <div className="reactionYoursMessage"><Icon28LikeFillRed width={16} height={16} /></div>
                       </div>
                       <div style={{display: "flex"}}>
                         <div className="messageDataLeft">
@@ -408,8 +452,28 @@ class TestChatPanel extends React.Component {
                     <Dropdown
                       action="click"
                       placement="top-end"
+                      style={{maxWidth: "240px"}}
                       content={
                         <List>
+                          <HorizontalScroll
+                            showArrows
+                            getScrollToLeft={(i) => i - 120}
+                            getScrollToRight={(i) => i + 120}
+                          >
+                            <div style={{display: 'flex', padding: "5px 5px 0px 5px"}}>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                                <IconButton><Icon24ThumbUp width={28} height={28} style={{color: "var(--dynamic_orange)"}}/></IconButton>
+                                <IconButton><Icon24ThumbDown width={28} height={28} style={{color: "var(--dynamic_orange)"}}/></IconButton>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                                <IconButton><Icon28LikeFillRed /></IconButton>
+                            </div>
+                          </HorizontalScroll>
+                          <Spacing separator="center" />
                           <CellButton
                             before={<Icon28ReplyOutline />}
                             multiline
@@ -489,12 +553,46 @@ class TestChatPanel extends React.Component {
                     </div>
                   </div>
                   <div className="writeBarChat">
-                    <Separator wide />
                     <WriteBar
+                      className="blockWriteBarChat"
                       before={
-                        <WriteBarIcon
-                          mode="attach"
-                        />
+                        <Dropdown
+                          action="hover"
+                          content={
+                            <List>
+                              <CellButton
+                                before={<Icon28PictureOutline />}
+                                multiline
+                              >
+                                Фото
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28VideoOutline />}
+                                multiline
+                              >
+                                Видео
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28LocationMapOutline />}
+                                multiline
+                              >
+                                Место
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28GiftOutline />}
+                                multiline
+                                onClick={() => this.props.openModal("MODAL_PAGE_GIFTS_HOME")}
+                              >
+                                Подарок
+                              </CellButton>
+                            </List>
+                          }
+                        >
+                          <WriteBarIcon
+                            mode="attach"
+                          />
+                        </Dropdown>
+                        
                       }
                       inlineAfter={
                         <div>
@@ -505,13 +603,13 @@ class TestChatPanel extends React.Component {
                       }
                       after={
                         <div>
-                          <WriteBarIcon aria-label="Смайлы и стикеры">
+                          {/*<WriteBarIcon aria-label="Смайлы и стикеры">
                             <Icon28SmileOutline />
-                          </WriteBarIcon>
+                          </WriteBarIcon>*/}
                           <WriteBarIcon aria-label="Записать голосовое сообщение">
                             <Icon28VoiceOutline />
                           </WriteBarIcon>
-                          <WriteBarIcon mode="send" />
+                          {/*<WriteBarIcon mode="send" />*/}
                         </div>
                       }
                       placeholder="Ваше сообщение..."
@@ -552,7 +650,7 @@ class TestChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -610,7 +708,30 @@ class TestChatPanel extends React.Component {
                       Артём Петрунин
                     </SimpleCell>
                     <div style={{display: "flex", marginLeft: "auto"}}>
-                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LikeOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                      <IconButton onClick={this.favoritesChatSnackbar} style={{marginTop: "auto", marginBottom: "auto"}}><Icon28FavoriteOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                    <Dropdown
+                      action="hover"
+                      placement="bottom-end"
+                      content={
+                        <List>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                          >
+                            Запросить доступ к скрытым фото
+                          </CellButton>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                            onClick={() => this.openLockPhoto()}
+                          >
+                            Предоставить доступ к скрытым фото
+                          </CellButton>
+                        </List>
+                      }
+                    >
+                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LockOutline style={{color: "var(--icon_secondary)"}} /></IconButton>
+                    </Dropdown>
                     <Dropdown
                       action="hover"
                       placement="bottom-end"
@@ -633,19 +754,6 @@ class TestChatPanel extends React.Component {
                             multiline
                           >
                             Вложения диалога
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                          >
-                            Запросить доступ к скрытым фото
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                            onClick={() => this.openLockPhoto()}
-                          >
-                            Предоставить доступ к скрытым фото
                           </CellButton>
                           <Spacing separator="center"/>
                           <CellButton
@@ -818,12 +926,46 @@ class TestChatPanel extends React.Component {
                     </div>
                   </div>
                   <div className="writeBarChat">
-                    <Separator wide />
                     <WriteBar
+                      className="blockWriteBarChat"
                       before={
-                        <WriteBarIcon
-                          mode="attach"
-                        />
+                        <Dropdown
+                          action="hover"
+                          content={
+                            <List>
+                              <CellButton
+                                before={<Icon28PictureOutline />}
+                                multiline
+                              >
+                                Фото
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28VideoOutline />}
+                                multiline
+                              >
+                                Видео
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28LocationMapOutline />}
+                                multiline
+                              >
+                                Место
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28GiftOutline />}
+                                multiline
+                                onClick={() => this.props.openModal("MODAL_PAGE_GIFTS_HOME")}
+                              >
+                                Подарок
+                              </CellButton>
+                            </List>
+                          }
+                        >
+                          <WriteBarIcon
+                            mode="attach"
+                          />
+                        </Dropdown>
+                        
                       }
                       inlineAfter={
                         <div>
@@ -881,7 +1023,7 @@ class TestChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -928,7 +1070,30 @@ class TestChatPanel extends React.Component {
                       Артём Петрунин
                     </SimpleCell>
                     <div style={{display: "flex", marginLeft: "auto"}}>
-                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LikeOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                      <IconButton onClick={this.favoritesChatSnackbar} style={{marginTop: "auto", marginBottom: "auto"}}><Icon28FavoriteOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                    <Dropdown
+                      action="hover"
+                      placement="bottom-end"
+                      content={
+                        <List>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                          >
+                            Запросить доступ к скрытым фото
+                          </CellButton>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                            onClick={() => this.openLockPhoto()}
+                          >
+                            Предоставить доступ к скрытым фото
+                          </CellButton>
+                        </List>
+                      }
+                    >
+                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LockOutline style={{color: "var(--icon_secondary)"}} /></IconButton>
+                    </Dropdown>
                     <Dropdown
                       action="hover"
                       placement="bottom-end"
@@ -951,19 +1116,6 @@ class TestChatPanel extends React.Component {
                             multiline
                           >
                             Вложения диалога
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                          >
-                            Запросить доступ к скрытым фото
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                            onClick={() => this.openLockPhoto()}
-                          >
-                            Предоставить доступ к скрытым фото
                           </CellButton>
                           <Spacing separator="center"/>
                           <CellButton
@@ -1136,12 +1288,46 @@ class TestChatPanel extends React.Component {
                     </div>
                   </div>
                   <div className="writeBarChat">
-                    <Separator wide />
                     <WriteBar
+                      className="blockWriteBarChat"
                       before={
-                        <WriteBarIcon
-                          mode="attach"
-                        />
+                        <Dropdown
+                          action="hover"
+                          content={
+                            <List>
+                              <CellButton
+                                before={<Icon28PictureOutline />}
+                                multiline
+                              >
+                                Фото
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28VideoOutline />}
+                                multiline
+                              >
+                                Видео
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28LocationMapOutline />}
+                                multiline
+                              >
+                                Место
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28GiftOutline />}
+                                multiline
+                                onClick={() => this.props.openModal("MODAL_PAGE_GIFTS_HOME")}
+                              >
+                                Подарок
+                              </CellButton>
+                            </List>
+                          }
+                        >
+                          <WriteBarIcon
+                            mode="attach"
+                          />
+                        </Dropdown>
+                        
                       }
                       inlineAfter={
                         <div>
@@ -1199,7 +1385,7 @@ class TestChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -1228,7 +1414,7 @@ class TestChatPanel extends React.Component {
                     </div>
                   </div>
                   <Placeholder
-                    icon={<Icon28MessageHeartOutline width={56} height={56} />}
+                    icon={<img src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" width={56} height={56} />}
                     header="У Вас нет таких чатов"
                     action={<Button mode="outline" size="m" onClick={this.select} data-mode="message">Все сообщения</Button>}
                   >
@@ -1246,7 +1432,30 @@ class TestChatPanel extends React.Component {
                       Артём Петрунин
                     </SimpleCell>
                     <div style={{display: "flex", marginLeft: "auto"}}>
-                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LikeOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                      <IconButton onClick={this.favoritesChatSnackbar} style={{marginTop: "auto", marginBottom: "auto"}}><Icon28FavoriteOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                    <Dropdown
+                      action="hover"
+                      placement="bottom-end"
+                      content={
+                        <List>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                          >
+                            Запросить доступ к скрытым фото
+                          </CellButton>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                            onClick={() => this.openLockPhoto()}
+                          >
+                            Предоставить доступ к скрытым фото
+                          </CellButton>
+                        </List>
+                      }
+                    >
+                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LockOutline style={{color: "var(--icon_secondary)"}} /></IconButton>
+                    </Dropdown>
                     <Dropdown
                       action="hover"
                       placement="bottom-end"
@@ -1269,19 +1478,6 @@ class TestChatPanel extends React.Component {
                             multiline
                           >
                             Вложения диалога
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                          >
-                            Запросить доступ к скрытым фото
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                            onClick={() => this.openLockPhoto()}
-                          >
-                            Предоставить доступ к скрытым фото
                           </CellButton>
                           <Spacing separator="center"/>
                           <CellButton
@@ -1454,12 +1650,46 @@ class TestChatPanel extends React.Component {
                     </div>
                   </div>
                   <div className="writeBarChat">
-                    <Separator wide />
                     <WriteBar
+                      className="blockWriteBarChat"
                       before={
-                        <WriteBarIcon
-                          mode="attach"
-                        />
+                        <Dropdown
+                          action="hover"
+                          content={
+                            <List>
+                              <CellButton
+                                before={<Icon28PictureOutline />}
+                                multiline
+                              >
+                                Фото
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28VideoOutline />}
+                                multiline
+                              >
+                                Видео
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28LocationMapOutline />}
+                                multiline
+                              >
+                                Место
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28GiftOutline />}
+                                multiline
+                                onClick={() => this.props.openModal("MODAL_PAGE_GIFTS_HOME")}
+                              >
+                                Подарок
+                              </CellButton>
+                            </List>
+                          }
+                        >
+                          <WriteBarIcon
+                            mode="attach"
+                          />
+                        </Dropdown>
+                        
                       }
                       inlineAfter={
                         <div>
@@ -1517,7 +1747,7 @@ class TestChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -1564,7 +1794,30 @@ class TestChatPanel extends React.Component {
                       Артём Петрунин
                     </SimpleCell>
                     <div style={{display: "flex", marginLeft: "auto"}}>
-                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LikeOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                      <IconButton onClick={this.favoritesChatSnackbar} style={{marginTop: "auto", marginBottom: "auto"}}><Icon28FavoriteOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                    <Dropdown
+                      action="hover"
+                      placement="bottom-end"
+                      content={
+                        <List>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                          >
+                            Запросить доступ к скрытым фото
+                          </CellButton>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                            onClick={() => this.openLockPhoto()}
+                          >
+                            Предоставить доступ к скрытым фото
+                          </CellButton>
+                        </List>
+                      }
+                    >
+                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LockOutline style={{color: "var(--icon_secondary)"}} /></IconButton>
+                    </Dropdown>
                     <Dropdown
                       action="hover"
                       placement="bottom-end"
@@ -1587,19 +1840,6 @@ class TestChatPanel extends React.Component {
                             multiline
                           >
                             Вложения диалога
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                          >
-                            Запросить доступ к скрытым фото
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                            onClick={() => this.openLockPhoto()}
-                          >
-                            Предоставить доступ к скрытым фото
                           </CellButton>
                           <Spacing separator="center"/>
                           <CellButton
@@ -1772,12 +2012,46 @@ class TestChatPanel extends React.Component {
                     </div>
                   </div>
                   <div className="writeBarChat">
-                    <Separator wide />
                     <WriteBar
+                      className="blockWriteBarChat"
                       before={
-                        <WriteBarIcon
-                          mode="attach"
-                        />
+                        <Dropdown
+                          action="hover"
+                          content={
+                            <List>
+                              <CellButton
+                                before={<Icon28PictureOutline />}
+                                multiline
+                              >
+                                Фото
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28VideoOutline />}
+                                multiline
+                              >
+                                Видео
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28LocationMapOutline />}
+                                multiline
+                              >
+                                Место
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28GiftOutline />}
+                                multiline
+                                onClick={() => this.props.openModal("MODAL_PAGE_GIFTS_HOME")}
+                              >
+                                Подарок
+                              </CellButton>
+                            </List>
+                          }
+                        >
+                          <WriteBarIcon
+                            mode="attach"
+                          />
+                        </Dropdown>
+                        
                       }
                       inlineAfter={
                         <div>
@@ -1835,7 +2109,7 @@ class TestChatPanel extends React.Component {
                               Только онлайн
                             </CellButton>
                             <CellButton
-                              before={<Icon28MessageHeartOutline />}
+                              before={<img style={{marginRight: "16px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
                               multiline
                               onClick={this.select} data-mode="favorites"
                             >
@@ -1882,7 +2156,30 @@ class TestChatPanel extends React.Component {
                       Артём Петрунин
                     </SimpleCell>
                     <div style={{display: "flex", marginLeft: "auto"}}>
-                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LikeOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                      <IconButton onClick={this.favoritesChatSnackbar} style={{marginTop: "auto", marginBottom: "auto"}}><Icon28FavoriteOutline style={{color: "var(--icon_secondary)"}}/></IconButton>
+                    <Dropdown
+                      action="hover"
+                      placement="bottom-end"
+                      content={
+                        <List>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                          >
+                            Запросить доступ к скрытым фото
+                          </CellButton>
+                          <CellButton
+                            before={<Icon28LockOutline />}
+                            multiline
+                            onClick={() => this.openLockPhoto()}
+                          >
+                            Предоставить доступ к скрытым фото
+                          </CellButton>
+                        </List>
+                      }
+                    >
+                      <IconButton style={{marginTop: "auto", marginBottom: "auto"}}><Icon28LockOutline style={{color: "var(--icon_secondary)"}} /></IconButton>
+                    </Dropdown>
                     <Dropdown
                       action="hover"
                       placement="bottom-end"
@@ -1905,19 +2202,6 @@ class TestChatPanel extends React.Component {
                             multiline
                           >
                             Вложения диалога
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                          >
-                            Запросить доступ к скрытым фото
-                          </CellButton>
-                          <CellButton
-                            before={<Icon28LockOutline />}
-                            multiline
-                            onClick={() => this.openLockPhoto()}
-                          >
-                            Предоставить доступ к скрытым фото
                           </CellButton>
                           <Spacing separator="center"/>
                           <CellButton
@@ -2090,12 +2374,46 @@ class TestChatPanel extends React.Component {
                     </div>
                   </div>
                   <div className="writeBarChat">
-                    <Separator wide />
                     <WriteBar
+                      className="blockWriteBarChat"
                       before={
-                        <WriteBarIcon
-                          mode="attach"
-                        />
+                        <Dropdown
+                          action="hover"
+                          content={
+                            <List>
+                              <CellButton
+                                before={<Icon28PictureOutline />}
+                                multiline
+                              >
+                                Фото
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28VideoOutline />}
+                                multiline
+                              >
+                                Видео
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28LocationMapOutline />}
+                                multiline
+                              >
+                                Место
+                              </CellButton>
+                              <CellButton
+                                before={<Icon28GiftOutline />}
+                                multiline
+                                onClick={() => this.props.openModal("MODAL_PAGE_GIFTS_HOME")}
+                              >
+                                Подарок
+                              </CellButton>
+                            </List>
+                          }
+                        >
+                          <WriteBarIcon
+                            mode="attach"
+                          />
+                        </Dropdown>
+                        
                       }
                       inlineAfter={
                         <div>
@@ -2132,6 +2450,7 @@ class TestChatPanel extends React.Component {
               || queryGet('vk_platform') === 'mobile_web') && (<div>
               <PanelHeader
                 left={<PanelHeaderBack onClick={() => goBack()} />}
+                right={<IconButton onClick={this.toggleContext2}><Icon28LockOutline/></IconButton>}
                 separator={true}
               >
                 <PanelHeaderContent
@@ -2164,20 +2483,8 @@ class TestChatPanel extends React.Component {
                     Вложения диалога
                   </CellButton>
                   <CellButton
-                    before={<Icon28LockOutline />}
-                    multiline
-                  >
-                    Запросить доступ к скрытым фото
-                  </CellButton>
-                  <CellButton
-                    before={<Icon28LockOutline />}
-                    multiline
-                    onClick={() => this.openLockPhoto()}
-                  >
-                    Предоставить доступ к скрытым фото
-                  </CellButton>
-                  <CellButton
-                    before={<Icon28LikeOutline />}
+                    before={<img style={{marginRight: "16px", marginLeft: "5px"}} src={Icon28MessageFavoriteOutline} className="Icon28MessageFavoriteOutline" />}
+                    onClick={this.favoritesChatSnackbar}
                     multiline
                   >
                     Добавить в избранные
@@ -2202,6 +2509,23 @@ class TestChatPanel extends React.Component {
                     multiline
                   >
                     Удалить диалог
+                  </CellButton>
+                </List>
+              </PanelHeaderContext>
+              <PanelHeaderContext opened={this.state.contextOpened2} onClose={this.toggleContext2}>
+                <List>
+                  <CellButton
+                    before={<Icon28LockOutline />}
+                    multiline
+                  >
+                    Запросить доступ к скрытым фото
+                  </CellButton>
+                  <CellButton
+                    before={<Icon28LockOutline />}
+                    multiline
+                    onClick={() => this.openLockPhoto()}
+                  >
+                    Предоставить доступ к скрытым фото
                   </CellButton>
                 </List>
               </PanelHeaderContext>
@@ -2305,12 +2629,13 @@ class TestChatPanel extends React.Component {
                   </div>
                 </div>
               </div>
-              <FixedLayout vertical="bottom">
-                <Separator wide />
+              <FixedLayout vertical="bottom" style={{marginBottom: "-48px"}}>
                 <WriteBar
+                  className="blockWriteBarChat"
                   before={
                     <WriteBarIcon
                       mode="attach"
+                      onClick={() => this.props.openModal("MODAL_PAGE_ACTION_CHAT")}
                     />
                   }
                   inlineAfter={
@@ -2322,13 +2647,37 @@ class TestChatPanel extends React.Component {
                   }
                   after={
                     <div>
-                      <WriteBarIcon aria-label="Смайлы и стикеры">
-                        <Icon28SmileOutline />
-                      </WriteBarIcon>
+                      <Dropdown
+                        style={{width: "70%"}}
+                        action="click"
+                        placement="top-end"
+                        content={
+                          <List>
+                            <CellButton
+                              before={<Icon28LockOutline />}
+                              multiline
+                            >
+                              Запросить доступ к скрытым фото
+                            </CellButton>
+                            <CellButton
+                              before={<Icon28LockOutline />}
+                              multiline
+                              onClick={() => this.openLockPhoto()}
+                            >
+                              Предоставить доступ к скрытым фото
+                            </CellButton>
+                          </List>
+                        }
+                      >
+                        <WriteBarIcon aria-label="Смайлы и стикеры">
+                          <Icon28LockOutline />
+                        </WriteBarIcon>
+                      </Dropdown>
                       <WriteBarIcon aria-label="Записать голосовое сообщение">
                         <Icon28VoiceOutline />
                       </WriteBarIcon>
-                      <WriteBarIcon mode="send" />
+                      
+                      {/*<WriteBarIcon mode="send" />*/}
                     </div>
                   }
                   placeholder="Cообщение"
@@ -2336,6 +2685,7 @@ class TestChatPanel extends React.Component {
               </FixedLayout>
               </div>)
             }
+            {this.state.snackbar}
             </Panel>
         );
     }
@@ -2346,7 +2696,9 @@ const mapDispatchToProps = {
   setPage,
   openPopout,
   closePopout,
-  goBack
+  goBack,
+  openModal,
+  closeModal
 };
 
 export default connect(null, mapDispatchToProps)(TestChatPanel);

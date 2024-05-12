@@ -10,7 +10,8 @@ import {
   withPlatform, 
   IOS,
   Group,
-  Div
+  Div,
+  FixedLayout
 } from "@vkontakte/vkui";
 
 import {
@@ -29,24 +30,24 @@ class HomeGiftsModal extends React.Component {
           id={id}
           header={
             <ModalPageHeader
-              left={platform !== IOS &&
-              <PanelHeaderButton onClick={onClose}><Icon24Cancel/></PanelHeaderButton>}
               right={platform === IOS &&
               <PanelHeaderButton onClick={onClose}><Icon24Dismiss/></PanelHeaderButton>}
             >
-              Подарки
+              <div style={{flexDirection: "column", textAlign: "center"}}>
+                <div>Подарки</div>
+                <div>Ваш баланс: 150 Coin</div>
+              </div>
+              
             </ModalPageHeader>
           }
           onClose={onClose}
           settlingHeight
         >
-          <Div className="balansBlock">
-            Ваш баланс: 100 coin
-          </Div>
+          
           <Group>
             <Div className="blockGifts">
               <div className="blockGift">
-                <div className="blockImgGifts" onClick={() => setPage('home', 'gift')}>
+                <div className="blockImgGifts">
                   <img className="imgGifts" src="https://cdn.pixabay.com/photo/2019/09/26/07/57/banana-4505334_1280.png" />
                 </div>
                 <div className="nameGifts">Банан</div>

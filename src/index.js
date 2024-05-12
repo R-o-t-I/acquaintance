@@ -11,6 +11,7 @@ import rootReducer from './js/store/reducers';
 import {composeWithDevTools} from 'redux-devtools-extension';
 
 import {setStory} from "./js/store/router/actions";
+import structure from './structure';
 
 import '@vkontakte/vkui/dist/vkui.css';
 import './css/main.css';
@@ -37,10 +38,10 @@ export const store = createStore(rootReducer, composeWithDevTools(
     applyMiddleware(thunk),
 ));
 
-store.dispatch(setStory('chat', 'base'));
+store.dispatch(setStory('home', 'base'));
 
 ReactDOM.render(
-    <Provider store={store}>
+    <Provider structure={structure} store={store}>
         <App/>
     </Provider>,
     document.getElementById('root')

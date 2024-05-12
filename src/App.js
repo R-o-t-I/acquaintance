@@ -12,6 +12,7 @@ import {
 import { getActivePanel } from "./js/services/_functions";
 import bridge from "@vkontakte/vk-bridge";
 import queryGet from "./functions/query_get.jsx";
+import ThemeControllers from "./functions/themeControllers.js";
 
 import {
   Epic,
@@ -47,15 +48,21 @@ import {
   Switch,
   ActionSheet,
   ActionSheetItem,
+  Header,
+  CardGrid,
+  Card,
 } from "@vkontakte/vkui";
 
 import {
   Icon12Dropdown,
   Icon12Verified,
+  Icon16ChevronOutline,
   Icon24Dismiss,
+  Icon24VoiceOutline,
   Icon28AddCircleFillBlue,
   Icon28AddCircleOutline,
   Icon28AddSquareOutline,
+  Icon28AllCategoriesOutline,
   Icon28CoinsOutline,
   Icon28DonateOutline,
   Icon28DoorArrowRightOutline,
@@ -66,8 +73,10 @@ import {
   Icon28Newsfeed,
   Icon28Notifications,
   Icon28Profile,
+  Icon28SearchOutline,
   Icon28SettingsOutline,
   Icon28StoryAddOutline,
+  Icon28SunOutline,
   Icon28Users3Outline,
   Icon28WriteSquareOutline,
 } from "@vkontakte/icons";
@@ -101,13 +110,17 @@ import HiddenPhotosPanel from "./js/panels/profile/settings/hiddenPhotos";
 import PremiumPanel from "./js/panels/profile/settings/premium";
 import PrivacyPanel from "./js/panels/profile/settings/privacy";
 import SettingsNotificationsPanel from "./js/panels/profile/settings/settingsNotifications";
+import BalancePanel from './js/panels/profile/settings/balance';
+import AppearancePanel from './js/panels/profile/settings/appearance';
 
 import HomeGiftsModal from "./js/components/modals/HomeGiftsModal";
 import ArticlesModal from "./js/components/modals/ArticlesModal";
 import PublicationModal from "./js/components/modals/PublicationModal";
+import ActionChatModal from "./js/components/modals/ActionChatModal";
 
 import noUserImage from "./img/noUserImage.jpeg";
 import logo from "./img/logo.svg";
+import logoMenu from "./img/logoMenu.svg";
 import { Dropdown } from "@vkontakte/vkui/dist/unstable";
 
 var infouser = 0;
@@ -263,6 +276,7 @@ class App extends React.Component {
       popouts,
       activeView,
       activeStory,
+      activePanel,
       activeModals,
       panelsHistory,
       openPopout,
@@ -303,6 +317,11 @@ class App extends React.Component {
           onClose={() => closeModal()}
           dynamicContentHeight
         />
+        <ActionChatModal
+          id="MODAL_PAGE_ACTION_CHAT"
+          onClose={() => closeModal()}
+          dynamicContentHeight
+        />
       </ModalRoot>
     );
 
@@ -311,27 +330,293 @@ class App extends React.Component {
         platform={Platform}
         isWebView={true}
         webviewType="internal"
+        
       >
         <AdaptivityProvider>
           <AppRoot>
             {/*Для ПК */}
             {queryGet("vk_platform") === "desktop_web" && (
               <div>
+                <nav class="sidebar close">
+                  <header>
+                    <div class="image-text">
+                      <span class="image">
+                        <img src={logoMenu} alt=""/>
+                      </span>
+                      <div class="text logo-text">
+                        <span class="name">OnlySwan</span>
+                        <span class="description">Найди свою половинку</span>
+                      </div>
+                    </div>
+                    <i class='bx bx-chevron-right toggle'><Icon16ChevronOutline /></i>
+                  </header>
+                  <div class="menu-bar">
+                    <div class="menu">
+                      <ul class="menu-links">
+                        <Cell
+                          //after={<IconButton onClick={() => this.openExetPopout()}><Icon28DoorArrowRightOutline /></IconButton>}
+                          onClick={() => setStory("profile", "base")}
+                          disabled={activeStory === "profile"}
+                          before={
+                            <Avatar
+                              style={
+                                activeStory === "profile"
+                                  ? {
+                                      marginLeft: "-7px"
+                                    }
+                                  : {marginLeft: "-7px"}
+                              }
+                              size={40}
+                              src={photo}
+                            />
+                          }
+                          description={<div style={activeStory === "profile" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}>@Alexander</div>}
+                          style={
+                            activeStory === "profile"
+                              ? {
+                                  backgroundColor: "var(--primary-color)",
+                                  borderRadius: 8,
+                                  marginTop: 8,
+                                  marginBottom: 8
+                                }
+                              : {
+                                  marginTop: 8,
+                                  marginBottom: 8
+                                }
+                          }
+                        >
+                          <div style={activeStory === "profile" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>{first_name}</div>
+                        </Cell>
+                      </ul>
+                      <Spacing separator="center" style={{transition: "var(--tran-05)"}}/>
+                      {/*
+                        <li class="search-box">
+                          <i class='bx bx-search icon'><Icon28SearchOutline/></i>
+                          <input type="text" placeholder="Поиск..."/>
+                        </li>
+                      */}
+                      <ul class="menu-links">
+                        <Cell
+                          onClick={() => setStory("home", "base")}
+                          disabled={activeStory === "home"}
+                          before={<Icon28Newsfeed style={activeStory === "home" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                          style={
+                            activeStory === "home"
+                              ? {
+                                  backgroundColor:
+                                    "var(--primary-color)",
+                                  borderRadius: 8,
+                                  marginTop: 8,
+                                  marginBottom: 8
+                                }
+                              : {
+                                  marginTop: 8,
+                                  marginBottom: 8
+                                }
+                          }
+                        >
+                          <div style={activeStory === "home" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Лента</div>
+                        </Cell>
+                        <Cell
+                          onClick={() => setStory("people", "base")}
+                          disabled={activeStory === "people"}
+                          before={<Icon28Users3Outline style={activeStory === "people" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                          style={
+                            activeStory === "people"
+                              ? {
+                                  backgroundColor:
+                                    "var(--primary-color)",
+                                  borderRadius: 8,
+                                  marginTop: 8,
+                                  marginBottom: 8
+                                }
+                              : {
+                                  marginTop: 8,
+                                  marginBottom: 8
+                                }
+                              }
+                        >
+                          <div style={activeStory === "people" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Люди</div>
+                        </Cell>
+                        <Cell
+                          onClick={() => setStory("chat", "base")}
+                          disabled={activeStory === "chat"}
+                          before={<Icon28MessagesOutline style={activeStory === "chat" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                          indicator={
+                            <Counter
+                              className="badgeMessageCounter"
+                              size="m"
+                              style={
+                                activeStory === "chat"
+                                ? {
+                                    backgroundColor: "#FFF",
+                                    color: "#19191a"
+                                  }
+                                : {
+                                    background: "var(--counter_primary_background)",
+                                    color: "var(--counter_primary_text)"
+                                  }
+                              }
+                            >
+                              <div className="badgeMessageCounterText">2</div>
+                            </Counter>
+                          }
+                          style={
+                            activeStory === "chat"
+                            ? {
+                                backgroundColor:
+                                  "var(--primary-color)",
+                                borderRadius: 8,
+                                marginTop: 8,
+                                marginBottom: 8
+                              }
+                            : {
+                                marginTop: 8,
+                                marginBottom: 8
+                              }
+                            }
+                        >
+                          <div style={activeStory === "chat" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Сообщения</div>
+                        </Cell>
+                        <Spacing separator="center" style={{transition: "var(--tran-05)"}}/>
+                        <Cell
+                          onClick={() => setStory("add", "base")}
+                          disabled={activeStory === "add"}
+                          before={<Icon28WriteSquareOutline style={activeStory === "add" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                          style={
+                            activeStory === "add"
+                            ? {
+                              backgroundColor:
+                                "var(--primary-color)",
+                              borderRadius: 8,
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          : {
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          }
+                        >
+                          <div style={activeStory === "add" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Добавить запись</div>
+                        </Cell>
+                        <Cell
+                          onClick={() => setStory("addArticles", "base")}
+                          disabled={activeStory === "addArticles"}
+                          before={<Icon28ListAddOutline style={activeStory === "addArticles" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                          style={
+                            activeStory === "addArticles"
+                            ? {
+                              backgroundColor:
+                                "var(--primary-color)",
+                              borderRadius: 8,
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          : {
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          }
+                        >
+                          <div style={activeStory === "addArticles" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Добавить статью</div>
+                        </Cell>
+                        <Cell 
+                          before={<Icon28StoryAddOutline style={activeStory === "addStory" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                          style={
+                            activeStory === "addStory"
+                            ? {
+                              backgroundColor:
+                                "var(--primary-color)",
+                              borderRadius: 8,
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          : {
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          }
+                        >
+                          <div style={activeStory === "addStory" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Добавить историю</div>
+                        </Cell>
+                        <Cell
+                          before={<Icon28LiveAddOutline style={activeStory === "addLive" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                          style={
+                            activeStory === "addLive"
+                            ? {
+                              backgroundColor:
+                                "var(--primary-color)",
+                              borderRadius: 8,
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          : {
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          }
+                        >
+                          <div style={activeStory === "addLive" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Добавить трансляцию</div>
+                        </Cell>
+                      </ul>
+                    </div>
+                    {/*
+                    <div class="bottom-content">
+                      <Spacing separator="center" style={{transition: "var(--tran-05)"}}/>
+                      <Cell
+                        onClick={() => this.openExetPopout()}
+                        before={<Icon28DoorArrowRightOutline style={activeStory === "exet" ? {color: "var(--icon-menu-color)"} : {color: "var(--text-color)"}}/>}
+                        style={
+                          activeStory === "exet"
+                          ? {
+                              backgroundColor:
+                                "var(--primary-color)",
+                              borderRadius: 8,
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          : {
+                              marginTop: 8,
+                              marginBottom: 8
+                            }
+                          }
+                      >
+                        <div style={activeStory === "exet" ? {color: "var(--icon-menu-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"} : {color: "var(--text-color)", fontSize: "17px", fontWeight: "500", whiteSpace: "nowrap", opacity: "1"}}>Выход</div>
+                      </Cell>
+                      
+                      <li class="mode">
+                        <div class="sun-moon">
+                          <i class='bx bx-moon icon moon'><Icon28MoonOutline width={24} height={24}/></i>
+                          <i class='bx bx-sun icon sun'><Icon28SunOutline width={24} height={24}/></i>
+                        </div>
+                        <span class="mode-text text">Темная тема</span>
+                        <div class="toggle-switch">
+                          <span class="switch"></span>
+                        </div>
+                      </li>
+                    </div>
+                    */}
+                  </div>
+                </nav>
                 <FixedLayout vertical="top" className="pageHeader">
                   <div className="pageHeaderBlock">
-                    <img
+                    {/*<img
                       className="pageHeaderLogo"
                       src={logo}
                       onClick={() => setStory("home", "base")}
                       disabled={activeStory === "home"}
-                    />
-                    <Search
-                      style={{
-                        width: "250px",
-                        marginLeft: "12px",
-                        marginRight: "12px",
-                      }}
-                    />
+                    />*/}
+                    <div className="searchBlockHeader">
+                      <Search
+                        style={{
+                          width: "100%",
+                          height: "38px"
+                        }}
+                        icon={<Icon24VoiceOutline />}
+                      />
+                      <div className="searchBorder" />
+                    </div>
                     <Dropdown
                       className="dropdownNotifications"
                       placement="bottom-start"
@@ -477,6 +762,35 @@ class App extends React.Component {
                   <IconButton style={{marginLeft: "auto", marginRight: "8px", marginTop: "auto", marginBottom: "auto", color: "var(--accent)"}} onClick={() => this.openExetPopout()}><Icon28DoorArrowRightOutline /></IconButton>
                   */}
                       <Dropdown
+                        className="dropdownAllProject"
+                        placement="bottom-end"
+                        content={
+                          <div>
+                            <div style={{marginBottom: "12px", fontSize: "14px", fontWeight: "500"}}>Наши проекты</div>
+                            <div className="dropdownAllProjectBlock">
+                              <div>
+                                <img src="https://sun9-84.userapi.com/impg/KcCWt2nF4ONFCCRE-3TFj21_kzSWrX192lmTwg/XQalOssevw8.jpg?size=576x576&quality=96&sign=f66248e882d181efcc81199bf35f3837&type=album" className="dropdownAllProjectBlockImg" />
+                                <div className="dropdownAllProjectBlockText">CooK</div>
+                              </div>
+                              <div>
+                                <img src="https://sun9-14.userapi.com/impg/SBvQB6QAvdxI284YG4DCZZtVgUabwkW98C4ywQ/Xu2U1ymsdOI.jpg?size=512x512&quality=96&sign=b4e69906d1fa3de26ae5798ad128e7cb&type=album" className="dropdownAllProjectBlockImg" />
+                                <div className="dropdownAllProjectBlockText">Мечты</div>
+                              </div>
+                              <div>
+                                <img src="https://sun9-46.userapi.com/impg/cBTNt1XwqK7QcdJZQT8cWzbDD_YMJ-bfSCd_2Q/1dV8Da8zQZs.jpg?size=2000x2000&quality=96&sign=67516c057fc3b5288509c83a7a740da2&type=album" className="dropdownAllProjectBlockImg" />
+                                <div className="dropdownAllProjectBlockText">Гуглер</div>
+                              </div>
+                              <div>
+                                <img src="https://sun9-67.userapi.com/impg/s3-6FWxblJJqSm9JMTfzAyZpVbfZsWwcj_OQ9g/L66vVkZ9yRk.jpg?size=576x576&quality=96&sign=87941b589a57bbb178741284e0a3e7c9&type=album" className="dropdownAllProjectBlockImg" />
+                                <div className="dropdownAllProjectBlockText">Вакцина</div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      >
+                        <IconButton style={{color: "var(--header_text_secondary)", marginRight: "8px"}}><Icon28AllCategoriesOutline /></IconButton>
+                      </Dropdown>
+                      <Dropdown
                         className="dropdownProfile"
                         placement="bottom-end"
                         content={
@@ -526,15 +840,7 @@ class App extends React.Component {
                               </div>
                             </div>
                             <List>
-                              <Cell
-                                disabled
-                                before={
-                                  <Icon28MoonOutline width={24} height={24} />
-                                }
-                                after={<Switch />}
-                              >
-                                Темная тема
-                              </Cell>
+                              <ThemeControllers />
                               <Cell
                                 expandable
                                 before={
@@ -562,14 +868,7 @@ class App extends React.Component {
                           </div>
                         }
                       >
-                        <div
-                          style={{
-                            position: "absolute",
-                            display: "flex",
-                            right: 0,
-                            marginTop: "10px",
-                          }}
-                        >
+                        <div style={{display: "flex"}}>
                           <Avatar
                             size={30}
                             src={photo}
@@ -594,13 +893,13 @@ class App extends React.Component {
                 </FixedLayout>
                 <SplitLayout
                   header={hasHeader && <PanelHeader separator={false} />}
-                  style={{ justifyContent: "center", marginTop: "66px" }}
+                  style={{ justifyContent: "center", marginTop: "66px", marginLeft: "45px" }}
                 >
                   <SplitCol
                     animate={!isDesktop}
                     spaced={0}
-                    width={isDesktop ? "734px" : "100%"}
-                    maxWidth={isDesktop ? "734px" : "100%"}
+                    width={isDesktop ? "calc(100vw - 110px)" : "100%"}
+                    maxWidth={isDesktop ? "calc(100vw - 110px)" : "100%"}
                   >
                     <Root id="home" activeView={activeView} popout={popout}>
                       <View
@@ -715,6 +1014,11 @@ class App extends React.Component {
                         history={history}
                         onSwipeBack={() => goBack()}
                       >
+                        <AppearancePanel
+                          id="appearance"
+                          withoutEpic={false}
+                          platform={Platform}
+                        />
                         <ProfilePanel
                           id="base"
                           withoutEpic={false}
@@ -775,11 +1079,16 @@ class App extends React.Component {
                           withoutEpic={false}
                           platform={Platform}
                         />
+                        <BalancePanel
+                          id="balance"
+                          withoutEpic={false}
+                          platform={Platform}
+                        />
                       </View>
                     </Root>
                   </SplitCol>
 
-                  {isDesktop && (
+                  {/*{isDesktop && (
                     <SplitCol
                       fixed
                       width="250px"
@@ -962,7 +1271,7 @@ class App extends React.Component {
                         </Group>
                       </Panel>
                     </SplitCol>
-                  )}
+                  )}*/}
                 </SplitLayout>
               </div>
             )}
@@ -975,7 +1284,7 @@ class App extends React.Component {
               <Epic
                 activeStory={activeStory}
                 tabbar={
-                  !isDesktop && (
+                  !isDesktop && activeStory !== 'chat' && (
                     <Tabbar>
                       <TabbarItem
                         onClick={() => setStory("home", "base")}
@@ -1127,6 +1436,11 @@ class App extends React.Component {
                     history={history}
                     onSwipeBack={() => goBack()}
                   >
+                    <AppearancePanel
+                      id="appearance"
+                      withoutEpic={false}
+                      platform={Platform}
+                    />
                     <ProfilePanel
                       id="base"
                       withoutEpic={false}
@@ -1184,6 +1498,11 @@ class App extends React.Component {
                     />
                     <SettingsNotificationsPanel
                       id="settingsNotifications"
+                      withoutEpic={false}
+                      platform={Platform}
+                    />
+                    <BalancePanel
+                      id="balance"
                       withoutEpic={false}
                       platform={Platform}
                     />

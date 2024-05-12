@@ -43,7 +43,7 @@ class GiftPanel extends React.Component {
 				>
 					Подарок
 				</PanelHeader>
-				<Group style={{paddingBottom: 84}}>
+				<Group>
 					<img className="imgGift" src="https://cdn.pixabay.com/photo/2019/09/26/07/57/banana-4505334_1280.png" />
 					<FormItem top="Получатель">
 						<SimpleCell before={<Avatar size={48} src="" />}>Артём Петрунин</SimpleCell>

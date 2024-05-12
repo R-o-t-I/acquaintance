@@ -119,11 +119,11 @@ class AddArticlesPanels extends React.Component {
 			{/*Для ПК */}
 			{
         (queryGet('vk_platform') === 'desktop_web') && (<div>
-			<FixedLayout vertical="top" style={{marginTop: "66px", maxWidth: "734px"}}>
+			<FixedLayout vertical="top" style={{marginTop: "66px", maxWidth: "100%"}}>
 				<PanelHeader
 					separator={false}
 					right={
-						<div style={{display: "flex"}}>
+						<div style={{display: "flex", marginLeft: "12px", marginRight: "12p"}}>
 							<Dropdown
 								placement="bottom-end"
 								style={{width: "100%", maxWidth: "450px"}}
@@ -145,6 +145,7 @@ class AddArticlesPanels extends React.Component {
 												</TabsItem>
 											</HorizontalScroll>
 										</Tabs>
+										<Separator wide />
 										<Search />
 										{this.state.activeTab === "drafts" ?<div>
 											{bots.map((bot, index) => (
@@ -169,6 +170,7 @@ class AddArticlesPanels extends React.Component {
 								<div style={{display: "flex", marginRight: "12px"}}><div style={{marginRight: "5px"}}>Статьи</div><div style={{marginTop: "auto", marginBottom: "auto"}}><Icon16Dropdown/></div></div>
 							</Dropdown>
 							<Dropdown
+								
 								placement="bottom-end"
 								style={{width: "100%", maxWidth: "450px"}}
 								content={
@@ -207,10 +209,8 @@ class AddArticlesPanels extends React.Component {
 						</div>
 					}
 				>
-					<PanelHeaderContent
-            before
-          >
-            <div style={{marginLeft: "6px", fontSize: "18px"}}>Новая статья</div>
+					<PanelHeaderContent>
+            <div style={{fontSize: "18px"}}>Новая статья</div>
           </PanelHeaderContent>
 				</PanelHeader>
 				<div style={{display: "flex", backgroundColor: "var(--background_content)", boxShadow: "0 0 0 1px #e1e3e6 inset", boxShadow: "0 0 0 var(--thin-border) var(--input_border) inset", borderBottom: "none"}}>
@@ -247,13 +247,15 @@ class AddArticlesPanels extends React.Component {
 				</HorizontalScroll>
 				</div>
 			</FixedLayout>
-				<Group style={{marginTop: "85px"}}>
-					<Title level="1" weight="bold" className="title-editor">
-						Заголовок
-					</Title>
-					<Headline weight="regular" className="headline-editor">
-						Основная часть
-					</Headline>
+				<Group style={{marginTop: "85px", overflow: "clip"}}>
+					<div className="windowEditArticles">
+						<Title level="1" weight="bold" className="title-editor">
+							Заголовок
+						</Title>
+						<Headline weight="regular" className="headline-editor">
+							Основная часть
+						</Headline>
+					</div>
 				</Group>
 				</div>)
 			}

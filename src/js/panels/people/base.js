@@ -51,7 +51,8 @@ import {
 	Icon24MessageOutline,
 	Icon24GiftOutline,
 	Icon12Verified,
-	Icon28SlidersOutline
+	Icon28SlidersOutline,
+	Icon48SwipeUp
 } from '@vkontakte/icons';
 
 class PeoplePanel extends React.Component {
@@ -81,7 +82,11 @@ class PeoplePanel extends React.Component {
 								icon={<Icon24Filter onClick={() => setPage('people', 'filter')} />}
 							/>
 							<Header mode="primary" aside={<Link>Хочу сюда</Link>}>Топ пользователи</Header>
-							<HorizontalScroll>
+							<HorizontalScroll
+								showArrows
+                getScrollToLeft={(i) => i - 120}
+                getScrollToRight={(i) => i + 120}
+							>
 								<div style={{display: 'flex'}}>
 									<HorizontalCell
 										size='s'
@@ -150,7 +155,7 @@ class PeoplePanel extends React.Component {
 										/>
 									</HorizontalCell>
 								</div>
-										</HorizontalScroll>
+							</HorizontalScroll>
 							</Group>
 							<Group>
 							<div className="people-block">
@@ -226,6 +231,7 @@ class PeoplePanel extends React.Component {
 										<div onClick={() => setPage('people', 'filter')} className="button-filter-card-people"><Icon28SlidersOutline style={{margin: "auto", marginTop: 10, color: "#FFFFFF"}} /></div>
 										<div className="button-done-card-people"><Icon28DoneOutline style={{margin: "auto", marginTop: 10, color: "#FFFFFF"}} /></div>
 										<div className="button-dismiss-card-people"><Icon28CancelOutline style={{margin: "auto", marginTop: 10, color: "#FFFFFF"}} /></div>
+										<div className="buttonSwipeUpCardPeople"><Icon48SwipeUp width={70} height={48}/></div>
 									</div>
 									<div>
 									<SimpleCell

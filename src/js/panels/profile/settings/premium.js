@@ -45,15 +45,15 @@ class PremiumPanel extends React.Component {
 						showArrows
 					>
 						<div>
-							<img className="imgGalleryPremium" src="" />
+							<img className="imgGalleryPremium" src="https://helpx.adobe.com/content/dam/help/ru/download-install/kb/troubleshoot-licensing-activation/jcr_content/main-pars/image_352537137/common-errors.png.img.png" />
 							<Div style={{textAlign: "center"}}>Смотри столько анкет, сколько хочешь</Div>
 						</div>
 						<div>
-							<img className="imgGalleryPremium" src="" />
+							<img className="imgGalleryPremium" src="https://helpx.adobe.com/content/dam/help/ru/download-install/kb/troubleshoot-licensing-activation/jcr_content/main-pars/image_352537137/common-errors.png.img.png" />
 							<Div style={{textAlign: "center"}}>Смотри столько анкет, сколько хочешь</Div>
 						</div>
 						<div>
-							<img className="imgGalleryPremium" src="" />
+							<img className="imgGalleryPremium" src="https://helpx.adobe.com/content/dam/help/ru/download-install/kb/troubleshoot-licensing-activation/jcr_content/main-pars/image_352537137/common-errors.png.img.png" />
 							<Div style={{textAlign: "center"}}>Смотри столько анкет, сколько хочешь</Div>
 						</div>
 					</Gallery>

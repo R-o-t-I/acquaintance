@@ -71,7 +71,6 @@ class PublicationModal extends React.Component {
                         <Button size="l" stretched>Сохранить</Button>
                     </FormItem>
                 </Group>
-                <Div style={{marginBottom: 20}}></Div>
             </ModalPage>
         );
     }

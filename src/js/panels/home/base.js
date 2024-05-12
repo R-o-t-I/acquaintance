@@ -23,7 +23,7 @@ import {
     VKCOM
 } from '@vkontakte/vkui'
 
-import { RichTooltip } from '@vkontakte/vkui/dist/unstable';
+import { RichTooltip, Dropdown } from '@vkontakte/vkui/dist/unstable';
 import '@vkontakte/vkui/dist/unstable.css' // CSS достаточно подключить один раз 
 
 import bridge from '@vkontakte/vk-bridge';
@@ -41,7 +41,8 @@ import {
   Icon28LikeOutline,
   Icon28MoreVertical,
   Icon28Notifications,
-  Icon28ReportOutline
+  Icon28ReportOutline,
+  Icon28ShareOutline
 } from '@vkontakte/icons';
 
 class HomePanel extends React.Component {
@@ -67,6 +68,9 @@ class HomePanel extends React.Component {
           <ActionSheetItem autoclose before={<Icon28EditOutline/>}>
             Редактировать запись
           </ActionSheetItem>
+          <ActionSheetItem autoclose before={<Icon28ShareOutline/>}>
+            Поделиться записью
+          </ActionSheetItem>
           <ActionSheetItem
               autoclose
               before={<Icon28DeleteOutline/>}
@@ -87,6 +91,9 @@ class HomePanel extends React.Component {
       >
         <ActionSheetItem autoclose before={<Icon28HideOutline />}>
           Скрыть записи автора
+        </ActionSheetItem>
+        <ActionSheetItem autoclose before={<Icon28ShareOutline/>}>
+          Поделиться записью
         </ActionSheetItem>
         <ActionSheetItem
             autoclose
@@ -201,6 +208,9 @@ openImg() {
                 </div>
               </HorizontalScroll>
             </Group>
+            {/*Для ПК */}
+            {
+					    (queryGet('vk_platform') === 'desktop_web') && (
             <Group>
               <div>
                 <SimpleCell 
@@ -213,11 +223,12 @@ openImg() {
                       content={
                         <div>
                           <CellButton before={<Icon28HideOutline />}>Скрыть записи автора</CellButton>
+                          <CellButton before={<Icon28ShareOutline />}>Поделиться записью</CellButton>
                           <CellButton before={<Icon28ReportOutline />} mode="danger">Пожаловаться</CellButton>
                         </div>
                       }
                     >
-                      <IconButton onClick={platform !== VKCOM ? () => this.openInteractionAcquaintance2() : undefined}><Icon28MoreVertical /></IconButton>
+                      <IconButton><Icon28MoreVertical /></IconButton>
                     </RichTooltip>
                   }
                   description="вчера в 19:35"
@@ -233,16 +244,12 @@ openImg() {
                       style={{margin: "0px 10px"}}
                       content={
                         <div style={{display: "flex"}}>
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/sad.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/think.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/stareyes.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fearful.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/poop.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/blush.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/cool.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/like.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fire.gif" className="emojiPost" />
-                          <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/heart.gif" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
                         </div>
                       }
                     >
@@ -263,6 +270,64 @@ openImg() {
                 </div>
               </div>
             </Group>
+              )
+            }
+            {/*Для всех остальных устройств */}
+            {
+              (queryGet('vk_platform') === 'mobile_android'
+              || queryGet('vk_platform') === 'mobile_iphone'
+              || queryGet('vk_platform') === 'mobile_ipad'
+              || queryGet('vk_platform') === 'mobile_android_messenger'
+              || queryGet('vk_platform') === 'mobile_iphone_messenger'
+              || queryGet('vk_platform') === 'mobile_web') && (
+              <div>
+                <SimpleCell 
+                  before={<Avatar size={48} src="" />}
+                  badge={<Icon12Verified />}
+                  after={<IconButton onClick={() => this.openInteractionAcquaintance2()}><Icon28MoreVertical /></IconButton>}
+                  description="вчера в 19:35"
+                >
+                  Артём Петрунин
+                </SimpleCell>
+                <Div>Всем привет!</Div>
+                <div className="allBlockIconPost">
+                  <div style={{display: "flex"}}>
+                    <Dropdown
+                      action="click"
+                      placement="top"
+                      style={{margin: "0px 10px"}}
+                      content={
+                        <div style={{display: "flex"}}>
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                        </div>
+                      }
+                    >
+                      <Tappable className="blockIconPost">
+                        <Icon28LikeOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
+                        <div className="indicatorblockIconPost">11</div>
+                      </Tappable>
+                    </Dropdown>
+                    <Tappable style={{marginLeft: "10px"}} className="blockIconPost">
+                      <Icon28CommentOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
+                      <div className="indicatorblockIconPost">11</div>
+                    </Tappable>
+                  </div>
+                  <Tappable className="blockIconPost" style={{marginLeft: 10}}>
+                    <Icon28GiftOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
+                    <div onClick={() => setPage('home', 'gifts')} className="indicatorblockIconPost">Подарок</div>
+                  </Tappable>
+                </div>
+              </div>
+              )
+            }
+            {/*Для ПК */}
+            {
+					    (queryGet('vk_platform') === 'desktop_web') && (
             <Group>
               <div>
                 <SimpleCell 
@@ -275,11 +340,12 @@ openImg() {
                       content={
                         <div>
                           <CellButton before={<Icon28EditOutline />}>Редактировать запись</CellButton>
+                          <CellButton before={<Icon28ShareOutline />}>Поделиться записью</CellButton>
                           <CellButton before={<Icon28DeleteOutline />} mode="danger">Удалить запись</CellButton>
                         </div>
                       }
                     >
-                      <IconButton onClick={platform !== VKCOM ? () => this.openInteractionAcquaintance() : undefined}><Icon28MoreVertical /></IconButton>
+                      <IconButton><Icon28MoreVertical /></IconButton>
                     </RichTooltip>
                   }
                   description="вчера в 15:12"
@@ -296,16 +362,13 @@ openImg() {
                     style={{margin: "0px 10px"}}
                     content={
                       <div style={{display: "flex"}}>
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/sad.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/think.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/stareyes.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fearful.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/poop.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/blush.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/cool.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/like.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/fire.gif" className="emojiPost" />
-                        <img src="http://static.skaip.su/img/emoticons/180x180/f6fcff/heart.gif" className="emojiPost" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
                       </div>
                     }
                   >
@@ -326,6 +389,62 @@ openImg() {
                 </div>
               </div>
             </Group>
+            )
+          }
+          {/*Для всех остальных устройств */}
+          {
+            (queryGet('vk_platform') === 'mobile_android'
+            || queryGet('vk_platform') === 'mobile_iphone'
+            || queryGet('vk_platform') === 'mobile_ipad'
+            || queryGet('vk_platform') === 'mobile_android_messenger'
+            || queryGet('vk_platform') === 'mobile_iphone_messenger'
+            || queryGet('vk_platform') === 'mobile_web') && (
+            <div>
+              <SimpleCell 
+                before={<Avatar size={48} src="" />}
+                badge={<Icon12Verified />}
+                after={<IconButton onClick={() => this.openInteractionAcquaintance()}><Icon28MoreVertical /></IconButton>}
+                description="вчера в 15:12"
+              >
+                Александр Тихонович
+              </SimpleCell>
+              <Div>Всем привет! Мой первый пост. Как вам этот закат? Пишите комментарии, ставьте лайки. <Link>#Закат</Link> <Link>@VK</Link></Div>
+              <Div><img onClick={this.openImg} className="imgPost" src="https://img2.akspic.ru/originals/1/7/1/5/6/165171-zemlya-oblako-atmosfera-poslesvechenie-zakat-1080x1920.jpg" /></Div>
+              <div className="allBlockIconPost">
+                <div style={{display: "flex"}}>
+                <Dropdown
+                  action="click"
+                  placement="top"
+                  style={{margin: "0px 10px"}}
+                  content={
+                    <div style={{display: "flex"}}>
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Emojione_1F60E.svg/640px-Emojione_1F60E.svg.png" className="emojiPost" />
+                    </div>
+                  }
+                >
+                  <Tappable className="blockIconPost">
+                    <Icon28LikeOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
+                    <div className="indicatorblockIconPost">11</div>
+                  </Tappable>
+                </Dropdown>
+                  <Tappable style={{marginLeft: "10px"}} className="blockIconPost">
+                    <Icon28CommentOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
+                    <div className="indicatorblockIconPost">11</div>
+                  </Tappable>
+                </div>
+                <Tappable className="blockIconPost" style={{marginLeft: 10}}>
+                  <Icon28GiftOutline style={{color: "var(--icon_outline_secondary)", marginTop: "5px", marginBottom: "5px", marginLeft: "10px", marginRight: "5px"}} />
+                  <div onClick={() => setPage('home', 'gifts')} className="indicatorblockIconPost">Подарок</div>
+                </Tappable>
+              </div>
+            </div>
+            )
+          }
         </Panel>
     );
   }
